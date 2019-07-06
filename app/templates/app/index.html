@@ -1,0 +1,11 @@
+{% if l_tools %}
+  <ul>
+    {% for tool in l_tools %}
+      <li><a href="{% url 'vft' tool.name %}"></a>{{ tool.name }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tools available</p>
+{% endif %}
+
+<!--TODO fix the path above, its throwing an error-->
