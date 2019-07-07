@@ -1,7 +1,7 @@
 {% if l_tools %}
   <ul>
     {% for tool in l_tools %}
-      <li><a href="{% url 'vft' tool.name %}"></a>{{ tool.name }}</li>
+      <li><a href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
     {% endfor %}
   </ul>
 {% else %}
