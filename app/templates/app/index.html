@@ -1,7 +1,9 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'app/styles.css' %}">
 {% if l_tools %}
   <ul>
     {% for tool in l_tools %}
-      <li><a href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
+      <li><a target="_blank" href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
     {% endfor %}
   </ul>
 {% else %}

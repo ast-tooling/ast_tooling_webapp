@@ -1,0 +1,5 @@
+*.pyc
+*.pyo
+app/*.pyc
+app/*.pyo
+app/__pycache__/*

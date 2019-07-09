@@ -2,6 +2,8 @@
 {% if error_message  %}
   <p><strong>{{ error_message}}</strong></p>
 {% endif %}
-<form class="" action="index.html" method="post">
+<form class="" action="{% url 'app:vft' %}" method="post">
     {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="" value="Create VFT Tradefile">
 </form>
