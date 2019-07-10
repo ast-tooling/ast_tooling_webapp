@@ -1,13 +1,13 @@
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'app/styles.css' %}">
-{% if l_tools %}
-  <ul>
-    {% for tool in l_tools %}
-      <li><a target="_blank" href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No tools available</p>
-{% endif %}
+{% extends "base.html" %}
 
-<!--TODO fix the path above, its throwing an error-->
+{% block content %}
+  {% if l_tools %}
+    <ul>
+      {% for tool in l_tools %}
+        <li><a target="_blank" href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tools available</p>
+  {% endif %}
+{% endblock %}

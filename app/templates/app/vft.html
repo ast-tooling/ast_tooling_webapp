@@ -1,9 +1,12 @@
-<h1>{{ tool.name }}</h1>
-{% if error_message  %}
-  <p><strong>{{ error_message}}</strong></p>
-{% endif %}
-<form class="" action="{% url 'app:vft' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" name="" value="Create VFT Tradefile">
-</form>
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ tool.name }}</h1>
+  {% if error_message  %}
+    <p><strong>{{ error_message}}</strong></p>
+  {% endif %}
+  <form class="" action="{% url 'app:vft' %}" method="post">
+      {% csrf_token %}
+      {{ form }}
+      <input type="submit" name="" value="Create VFT Tradefile">
+  </form>
+{% endblock %}

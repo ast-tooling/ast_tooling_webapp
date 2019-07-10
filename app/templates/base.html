@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    {% if tool %}
+      <title>AST | {{tool.name}}</title>
+    {% else %}
+      <title>AST Tooling</title>
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/styles.css' %}">
+  </head>
+  <body>
+    {% block header %}
+      <div class="header">
+        <div class="container">
+          <nav>
+            <a href="#">Home</a>
+            <a href="#">About</a>
+          </nav>
+        </div>
+      </div>
+    {% endblock %}
+    <div class="body">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </body>
+</html>

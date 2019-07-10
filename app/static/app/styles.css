@@ -1,3 +1,19 @@
 li a {
   color: green;
 }
+
+.header {
+  background: yellow;
+  color: #fff;
+  position: fixed;
+  width: 100%;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+nav {
+
+}
