@@ -3,17 +3,20 @@ li a {
 }
 
 .header {
-  background: yellow;
-  color: #fff;
-  position: fixed;
-  width: 100%;
-}
-
-.container {
-  width: 80%;
-  margin: 0 auto;
+  height: 5%;
+  background-color: #ff6d00;
+  width:100%
 }
 
 nav {
 
+}
+
+body {
+  color: #000000;
+  font-size: 87.5%;
+  font-family: arial;
+  line-height: 1.5;
+  text-align: left;
+  margin-top: 20px;
 }

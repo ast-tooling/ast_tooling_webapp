@@ -4,7 +4,7 @@ from django.template import loader
 from django.urls import reverse
 
 from .models import Tool
-from .forms import VftForm
+from .forms import VftForm,PrePostForm
 
 # Create your views here.
 def index(request):
@@ -36,7 +36,13 @@ def vft(request):
     return render(request,'app/vft.html',context)
 
 def prepost(request):
-    return HttpResponse('pre post time snitches')
+    tool = Tool.objects.filter(name='prepost compare').values()[0]
+    form = PrePostForm()
+    context = {
+        'form': form,
+        'tool': tool,
+    }
+    return render(request,'app/prepost.html',context)
 
 def cazar(request):
     return HttpResponse('find this')

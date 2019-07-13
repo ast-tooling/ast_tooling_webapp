@@ -1,0 +1,21 @@
+li a {
+  color: green;
+}
+
+.header {
+  height: 5%;
+  background-color: #ff6d00;
+  width:100%
+}
+
+nav {
+
+}
+
+body {
+  color: #000000;
+  font-size: 87.5%;
+  font-family: arial;
+  line-height: 1.5;
+  text-align: left;
+}
