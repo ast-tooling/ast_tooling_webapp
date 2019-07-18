@@ -1,0 +1,6 @@
+{% extends "base.html"%}
+{% if prov_id %}
+  <h5>VFT file created for {{ name }} using provider id {{ prov_id }}</h5>
+{% else %}
+  <p>Oops, something must've gone wrong</p>
+{% endif %}
