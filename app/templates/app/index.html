@@ -1,12 +1,15 @@
 {% extends "base.html" %}
+{% load bootstrap4 %}
 
 {% block content %}
   {% if l_tools %}
-    <ul>
       {% for tool in l_tools %}
-        <li><a target="_blank" href="/{{ tool.url_name }}">{{ tool.name }}</a></li>
+      <div class="card" style="width: 80%;margin: auto; margin-top: 20px;">
+        <div class="card-body">
+            <a target="_blank" href="/{{ tool.url_name }}" style="color: #52819e">{{ tool.name }}</a>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
   {% else %}
     <p>No tools available</p>
   {% endif %}

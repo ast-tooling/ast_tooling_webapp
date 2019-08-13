@@ -3,7 +3,7 @@ from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 
-from .models import Tool
+from .models import Tool,PrePostComp
 from .forms import VftForm,PrePostForm
 
 import os
@@ -54,12 +54,20 @@ def vft(request):
 
 def prepost(request):
     tool = Tool.objects.filter(name='prepost compare').values()[0]
-    form = PrePostForm()
-    context = {
-        'form': form,
-        'tool': tool,
-    }
-    return render(request,'app/prepost.html',context)
+    if request.method == 'POST':
+        PrePostForm(request.POST)
+        if form.is_valid:
+            context = {
+                'text': 'here there here is text',
+            }
+            return render(request,'app/thanks.html',context)
+    else:
+        form = PrePostForm()
+        context = {
+            'form': form,
+            'tool': tool,
+        }
+        return render(request,'app/prepost.html',context)
 
 def cazar(request):
     return HttpResponse('find this')
