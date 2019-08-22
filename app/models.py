@@ -1,4 +1,5 @@
 from django.db import models
+from .prepost import compare
 
 # Create your models here.
 class Tool(models.Model):
@@ -33,16 +34,74 @@ class PrePostComp(object):
             self.spreadsheetUrl = ''
             self.spreadsheetId = ''
 
+        # Optional Parameters and Default Values:
+        # -preEnv and postEnv
+        #   desc: environment batch was ran in
+        #   values: imdb, reportdb
+        # -compareLogic
+        #   desc: logic used to match docs across batches
+        #   values: docId, masterKey
+        # -noChangeCols and noChangeRows
+        #   desc: controls whether columns (doc props) and rows (pre/post pairs) that saw no change are included
+        #   values: show, hide, exclude
+        # -masterKeyProps
+        #   desc: doc props that will be used to match docs across batches if compareLogic = docId
+        #   values: props listed and any user defined properties from free-form text box
+        optionalParams = {  'preEnv'            : 'imdb',
+                            'postEnv'           : 'imdb',
+                            'compareLogic'      : 'docId',
+                            'noChangeCols'      : 'hide', # hide and show work, except has not yet been implemented
+                            'noChangeRows'      : 'hide', # hide and show work, except has not yet been implemented
+                            'masterKeyProps'    : ['ACCOUNT_NUMBER', 'INVOICE_NUMBER', 'TOTAL_DUE', 'BT_ROUTE', 'FFDID'],
+                            'ignoredProps'      : ['FILEDATE', 'SIG_BMP', 'FILE_PREFIX', 'XML_DATA', 'BT_PRINT_FILE_NAME', 'BILLING_ADDRESS_BEG1',
+                                                   'BILLING_ADDRESS_BEG2','BILLING_ADDRESS_END1', 'BILLING_ADDRESS_END2', 'BILLING_ADDRESS_ZIP4',
+                                                   'BILLING_ADDRESS_ZIP5', 'BILLING_ADDRESS_CITY', 'BILLING_ADDRESS_STATE', 'ROWIMG', 'JOB_ID']}
+
+        for param in optionalParams.keys():
+            if param in kwargs:
+                setattr(self, param, kwargs[param])
+            else:
+                setattr(self, param, optionalParams[param])
+
         # create arguments dict to pass to funcs
         self.arguments = {
-            "custId"        : self.csrId,
-            "preId"         : self.prechangeId,
-            "postId"        : self.postchangeId,
-            "spreadsheetURL": self.spreadsheetUrl,
-            "spreadSheetId" : self.spreadsheetId,
+            'custId'            : self.csrId,
+            'preId'             : self.prechangeId,
+            'preEnv'            : self.preEnv,
+            'postId'            : self.postchangeId,
+            'postEnv'           : self.postEnv,
+            'spreadsheetURL'    : self.spreadsheetUrl,
+            'spreadSheetId'     : self.spreadsheetId,
+            'compareLogic'      : self.compareLogic,
+            'noChangeCols'      : self.noChangeCols,
+            'noChangeRows'      : self.noChangeRows,
+            'masterKeyProps'    : self.masterKeyProps,
+            'ignoredProps'      : self.ignoredProps,
         }
+
+        # set stacks as class attributes
+        # TODO how to handle circular argument of establishing connection and
+        # determining stack, only way would be to connect to billing master
+        # by default or not using the conns passed back by InitSQLClient
+        # maybe there's a master bool in the InitSQLClient func?
+        # maybe there's a sep master conn that is done in the constructor?
+        self.stack = {}
+        master_mysqlClient = compare.InitSQLClient(master=True)
+        for k,v in master_mysqlClient.items():
+            cursor = v.cursor()
+            cursor.execute("SELECT r.Schema FROM billingmaster.fsimastercustomer mc "                     \
+                           "INNER JOIN billingmaster.fsibilltrustdbstack s ON mc.DbStackId=s.DbStackId "  \
+                           "LEFT JOIN billingmaster.fsibilltrustdatabase r ON s.ReadDbId=r.DatabaseId "   \
+                           "WHERE mc.customerid = %s;" % self.csrId)
+            schema = cursor.fetchone()
+            self.stack[k] = schema[0]
+            cursor.close()
+
+        print("stack check is:")
+        print(self.stack)
+
         # as a part of constructer, connect to databases
-        self.mysqlClient = compare.InitSQLClient()
+        self.mysqlClient = compare.InitSQLClient(dStack=self.stack)
         self.fsidocprops = compare.InitMongoClient()
         # self.sql_serve_conn = compare.InitSqlServerClient()
 

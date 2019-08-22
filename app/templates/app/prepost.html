@@ -7,11 +7,14 @@
     <p><strong>{{ error_message }}</strong></p>
   {% endif %}
   <div class="container">
-    <form class="form" action="{% url 'app:vft' %}" method="post">
+    <form class="form" action="{% url 'app:prepost' %}" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
         <input type="submit" name="" value="Create That Good Stuff">
     </form>
   </div>
-
+  {% if url %}
+  <hr>
+  <h5><a target="_blank" href="{{ url }}">Click to open Pre Post Sheet</a></h5>
+  {% endif %}
 {% endblock content %}

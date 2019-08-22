@@ -25,7 +25,7 @@ def vft(request):
         form = VftForm(request.POST)
         if form.is_valid():
             l_vft_cust = [form.cleaned_data['prov_id'],
-                          form.cleaned_data['csr_id'],
+                          form.cleaned_data['csr_vft_id'],
                           form.cleaned_data['name']
                           ]
             with open(base+fname,'w') as f:
@@ -42,7 +42,11 @@ def vft(request):
                 'vft_list': l_vft_cust,
             }
             return render(request,'app/thanks.html',context)
-        elif form.is_valid == False:
+        elif form.is_valid() == False:
+            context = {
+                'tool': tool,
+                'form': form
+            }
             HttpResponseRedirect('/no_bueno/')
     else:
         form = VftForm()
@@ -55,12 +59,18 @@ def vft(request):
 def prepost(request):
     tool = Tool.objects.filter(name='prepost compare').values()[0]
     if request.method == 'POST':
-        PrePostForm(request.POST)
-        if form.is_valid:
+        form = PrePostForm(request.POST)
+        if form.is_valid():
+            ppc_obj = PrePostComp(form.cleaned_data['prechange_id'],
+                                  form.cleaned_data['postchange_id'],
+                                  form.cleaned_data['csr_ppc_id'],
+                                  ssUrl=form.cleaned_data['spreadsheet_url'])
+            url = ppc_obj.spreadsheetUrl
             context = {
-                'text': 'here there here is text',
+                'url': url,
+                'form': form,
             }
-            return render(request,'app/thanks.html',context)
+            return render(request,'app/prepost.html',context)
     else:
         form = PrePostForm()
         context = {
