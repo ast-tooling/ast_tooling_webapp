@@ -8,6 +8,8 @@ from .forms import VftForm,PrePostForm
 
 import os
 
+API_KEY = 'AIzaSyANaCUsVD4l-ZsIh9pST5o-tAfMNJINXB0'
+
 # Create your views here.
 def index(request):
     l_tools = Tool.objects.order_by('-pub_date')[:5]
@@ -67,7 +69,7 @@ def prepost(request):
                                   ssUrl=form.cleaned_data['spreadsheet_url'])
             url = ppc_obj.spreadsheetUrl
             context = {
-                'url': url,
+                'url': url+'&key='+API_KEY,
                 'form': form,
             }
             return render(request,'app/prepost.html',context)

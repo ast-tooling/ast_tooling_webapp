@@ -106,7 +106,7 @@ class PrePostComp(object):
         # self.sql_serve_conn = compare.InitSqlServerClient()
 
         # add google api build obj as class attr
-        self.service = compare.GoogleAPIAuthorization()
+        # self.service = compare.GoogleAPIAuthorization()
 
         # grab coversheet ids
         self.coversheetDocIds = compare.GetCoversheetDocIds(self.mysqlClient,
