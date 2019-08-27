@@ -251,7 +251,7 @@ def GetFSIDocumnetInfo(mysqlClient, arguments):
 def GoogleAPIAuthorization():
     # add 5 vars below, updaed in func as needed
     base = os.path.abspath(os.path.dirname(__file__))
-    token_fname = 'token.picks'
+    token_fname = 'token.pickle'
     creds_fname = 'credentials.json'
     token_path = os.path.join(base,token_fname)
     creds_path = os.path.join(base,creds_fname)
@@ -259,6 +259,7 @@ def GoogleAPIAuthorization():
     creds = None
     if os.path.exists(token_path):
         with open(token_path, 'rb') as token:
+            print('roken file found at %s' % token_path)
             creds = pickle.load(token, encoding='latin1')
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -271,7 +272,8 @@ def GoogleAPIAuthorization():
         # Save the credentials for the next run
         with open(os.path.join(base,'token.pickle'), 'wb') as token:
             pickle.dump(creds, token)
-    return creds
+    service = discovery.build('sheets', 'v4', credentials=creds)
+    return service
 
 # Write a single range of values out
 @fn_timer
@@ -1860,14 +1862,11 @@ startTime = time.time()
 timerList = []
 
 # Authorize Google Sheets API credentials and build service
-creds = GoogleAPIAuthorization()
-service = discovery.build('sheets', 'v4', credentials=creds)
+# asimon :: removing the google auth piece as it should only be ran once at runtime
+# creds = GoogleAPIAuthorization()
+# service = discovery.build('sheets', 'v4', credentials=creds)
 
 # List of properties that we never want to include in our compare
 #arguments['ignoredProps'] = ( 'FILEDATE', 'FILE_PREFIX', 'XML_DATA', 'BT_PRINT_FILE_NAME', 'BILLING_ADDRESS_BEG1', 'BILLING_ADDRESS_BEG2',
 #                        'BILLING_ADDRESS_END1', 'BILLING_ADDRESS_END2', 'BILLING_ADDRESS_ZIP4', 'BILLING_ADDRESS_ZIP5', 'BILLING_ADDRESS_CITY',
 #                        'BILLING_ADDRESS_STATE', 'ROWIMG', 'JOB_ID')
-
-
-if __name__ == "__main__":
-    run(sys.argv[1:])

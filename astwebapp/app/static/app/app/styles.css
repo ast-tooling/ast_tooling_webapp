@@ -8,8 +8,8 @@ li a {
   width:100%
 }
 
-nav {
-
+.navbar {
+    background-color: #000;
 }
 
 body {
@@ -18,4 +18,5 @@ body {
   font-family: arial;
   line-height: 1.5;
   text-align: left;
+  margin-top: 20px;
 }

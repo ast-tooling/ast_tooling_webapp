@@ -4,3 +4,5 @@ app/*.pyc
 app/*.pyo
 ./app/__pycache__/*
 *.csv
+*.pickle
+*.json
