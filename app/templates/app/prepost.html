@@ -7,11 +7,38 @@
     <p><strong>{{ error_message }}</strong></p>
   {% endif %}
   <div class="container">
-    <form class="form" action="{% url 'app:prepost' %}" method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <input type="submit" name="" value="Create That Good Stuff">
-    </form>
+
+    <div class="row">
+
+      <div class="col-3 border-right border-dark">
+        
+        <form class="form" action="{% url 'app:prepost' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            
+        </form>
+      </div>
+
+
+      <div class="col-1.5 ml-3">
+        <form class="optForm" action="{% url 'app:prepost' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form optForm %}
+        </form>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col">
+        <form class="subForm" action="{% url 'app:prepost' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form subForm %}
+            <input type="submit" name="" value="Create That Good Stuff"> 
+        </form>
+      </div>
+    </div>  
+
+        
   </div>
   {% if url %}
   <hr>

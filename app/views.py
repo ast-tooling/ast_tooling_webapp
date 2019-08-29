@@ -4,7 +4,7 @@ from django.template import loader
 from django.urls import reverse
 
 from .models import Tool,PrePostComp
-from .forms import VftForm,PrePostForm
+from .forms import VftForm,PrePostForm,PrePostOptForm,PrePostSubmitForm
 
 import os
 
@@ -62,6 +62,8 @@ def prepost(request):
     tool = Tool.objects.filter(name='prepost compare').values()[0]
     if request.method == 'POST':
         form = PrePostForm(request.POST)
+        optForm = PrePostOptForm(request.POST)
+        subForm = PrePostSubmitForm(request.POST)
         if form.is_valid():
             ppc_obj = PrePostComp(form.cleaned_data['prechange_id'],
                                   form.cleaned_data['postchange_id'],
@@ -69,15 +71,21 @@ def prepost(request):
                                   ssUrl=form.cleaned_data['spreadsheet_url'])
             url = ppc_obj.spreadsheetUrl
             context = {
-                'url': url+'&key='+API_KEY,
-                'form': form,
+                'url'       : url+'&key='+API_KEY,
+                'form'      : form,
+                'optForm'   : optForm,
+                'subForm'   : subForm
             }
             return render(request,'app/prepost.html',context)
     else:
         form = PrePostForm()
+        optForm = PrePostOptForm()
+        subForm = PrePostSubmitForm()
         context = {
-            'form': form,
-            'tool': tool,
+            'form'      : form,
+            'optForm'   : optForm,
+            'subForm'   : subForm,
+            'tool'      : tool,
         }
         return render(request,'app/prepost.html',context)
 

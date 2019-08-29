@@ -26,9 +26,6 @@ class PrePostForm(forms.Form):
     prechange_id = forms.CharField(label='Prechange ID', max_length=10)
     postchange_id = forms.CharField(label='Postchange ID', max_length=10)
     csr_ppc_id = forms.CharField(label='CSR ID', max_length=10)
-    spreadsheet_url = forms.CharField(label='Spreadsheet URL')
-    pre_env = forms.ChoiceField(label='Pre Environment',choices=[('IM','imstage'),('P','prod')])
-    post_env = forms.ChoiceField(label='Post Environment',choices=[('IM','imstage'),('P','prod')])
 
     def __init__(self,*args, **kwargs):
         super(PrePostForm, self).__init__(*args, **kwargs)
@@ -46,10 +43,29 @@ class PrePostForm(forms.Form):
             'placeholder': '',
         })
 
-        self.fields['spreadsheet_url'].widget.attrs.update({
-            'placeholder': 'spreadsheets/d/1-SWPPRg2i2IsTgUA-4BvpEkMyE1TBZUvmEHZw1zpWo4/edit?usp=drive_web&ouid=116956695434029002425',
-        })
+
+class PrePostOptForm(forms.Form):
+    pre_env = forms.ChoiceField(label='Pre Environment',choices=[('IM','imstage'),('P','prod')])
+    post_env = forms.ChoiceField(label='Post Environment',choices=[('IM','imstage'),('P','prod')])
+
+    def __init__(self,*args, **kwargs):
+        super(PrePostOptForm, self).__init__(*args, **kwargs)
 
         self.fields['pre_env'].widget.attrs.update({
             'placeholder': '',
         })
+
+        self.fields['post_env'].widget.attrs.update({
+            'placeholder': '',
+        })        
+
+class PrePostSubmitForm(forms.Form):
+    spreadsheet_url = forms.CharField(label='Spreadsheet URL')
+
+    def __init__(self,*args, **kwargs):
+        super(PrePostSubmitForm, self).__init__(*args, **kwargs)
+
+        self.fields['spreadsheet_url'].widget.attrs.update({
+            'placeholder': 'spreadsheets/d/1-SWPPRg2i2IsTgUA-4BvpEkMyE1TBZUvmEHZw1zpWo4/edit?usp=drive_web&ouid=116956695434029002425',
+        })
+      
