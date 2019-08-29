@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
+{% load crispy_forms_tags %}
 
 {% block content %}
   <h1 style="margin-left:50px;">{{ tool.name }}</h1>
@@ -14,25 +15,28 @@
         
         <form class="form" action="{% url 'app:prepost' %}" method="post">
             {% csrf_token %}
-            {% bootstrap_form form %}
-            
+            <!-- {% bootstrap_form form %} -->
+            {{form.csr_ppc_id|as_crispy_field}}
+            {{form.prechange_id|as_crispy_field}}
+            {{form.postchange_id|as_crispy_field}}           
         </form>
       </div>
 
 
       <div class="col-1.5 ml-3">
-        <form class="optForm" action="{% url 'app:prepost' %}" method="post">
+        <form class="form" action="{% url 'app:prepost' %}" method="post">
             {% csrf_token %}
-            {% bootstrap_form optForm %}
+            {{form.pre_env|as_crispy_field}}
+            {{form.post_env|as_crispy_field}} 
         </form>
       </div>
     </div>
 
     <div class="row mt-3">
       <div class="col">
-        <form class="subForm" action="{% url 'app:prepost' %}" method="post">
+        <form class="form" action="{% url 'app:prepost' %}" method="post">
             {% csrf_token %}
-            {% bootstrap_form subForm %}
+            {{form.spreadsheet_url|as_crispy_field}}
             <input type="submit" name="" value="Create That Good Stuff"> 
         </form>
       </div>
