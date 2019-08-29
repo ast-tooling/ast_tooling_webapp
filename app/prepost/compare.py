@@ -22,7 +22,7 @@ from itertools import tee
 from collections import OrderedDict
 import mysql.connector
 from base64 import b64decode
-import pyodbc
+# import pyodbc
 from memory_profiler import profile
 
 def fn_timer(function):
@@ -154,6 +154,7 @@ def InitMongoClient():
 
     ##################################
     #  START: CONNECT TO SQL SERVER  #
+'''
 @fn_timer
 def InitSqlServerConn(server='dnco-stc2bsql.billtrust.local',database='carixDataProcessing',trusted_conn_bool='yes'):
     print('Connecting using windows auth...')
@@ -165,6 +166,7 @@ def InitSqlServerConn(server='dnco-stc2bsql.billtrust.local',database='carixData
     print('Connected, cursor object returned...')
     #   END: CONNECT TO SQL SERVER   #
     ##################################
+'''
 @fn_timer
 def decode_password(encoded):
     # print('encoded password is %s' % encoded)
