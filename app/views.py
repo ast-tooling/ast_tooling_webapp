@@ -2,9 +2,13 @@ from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
+from celery import task
 
 from .models import Tool,PrePostComp
 from .forms import VftForm,PrePostForm
+from .prepost import compare
+from .prepost import sheet_requests
+
 
 import os
 
@@ -63,15 +67,23 @@ def prepost(request):
     if request.method == 'POST':
         form = PrePostForm(request.POST)
         if form.is_valid():
-            ppc_obj = PrePostComp(form.cleaned_data['prechange_id'],
-                                  form.cleaned_data['postchange_id'],
-                                  form.cleaned_data['csr_ppc_id'],
+            ppc_obj = PrePostComp(int(form.cleaned_data['prechange_id']),
+                                  int(form.cleaned_data['postchange_id']),
+                                  int(form.cleaned_data['csr_ppc_id']),
                                   ssUrl=form.cleaned_data['spreadsheet_url'])
-            url = ppc_obj.spreadsheetUrl
+            url = ppc_obj.spreadsheetUrl            
             context = {
                 'url'       : url+'&key='+API_KEY,
                 'form'      : form,
             }
+
+            ## TESTING
+            #prePostDocProps = compare.QueryMongo(ppc_obj.fsidocprops, ppc_obj.coversheetDocIds, ppc_obj.arguments)
+            #mergedData = compare.MergeToDataFrame(prePostDocProps[0], prePostDocProps[1], ppc_obj.fsiDocumentInfo, ppc_obj.arguments, ppc_obj.service)
+            #compare.CreateCompareTab(mergedData[0], mergedData[1], mergedData[2], ppc_obj.arguments, ppc_obj.service)
+
+            # END TESTING
+
             return render(request,'app/prepost.html',context)
     else:
         form = PrePostForm()

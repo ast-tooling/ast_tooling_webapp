@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
-    'crispy_forms'
+    'crispy_forms',
+    'channels'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -58,6 +59,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'astwebapp.urls'
+ASGI_APPLICATION = 'astwebapp.routing.application'
 
 TEMPLATES = [
     {

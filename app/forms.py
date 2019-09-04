@@ -1,4 +1,6 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 class VftForm(forms.Form):
     csr_vft_id = forms.CharField(label='CSR ID', max_length=10)
@@ -23,14 +25,59 @@ class VftForm(forms.Form):
 
 
 class PrePostForm(forms.Form):
-    prechange_id = forms.CharField(label='Prechange ID', max_length=10)
-    postchange_id = forms.CharField(label='Postchange ID', max_length=10)
-    csr_ppc_id = forms.CharField(label='CSR ID', max_length=10)
-    pre_env = forms.ChoiceField(label='Pre Environment',choices=[('IM','imstage'),('P','prod')])
-    post_env = forms.ChoiceField(label='Post Environment',choices=[('IM','imstage'),('P','prod')])
-    spreadsheet_url = forms.CharField(label='Spreadsheet URL')
-        
+    
+    prechange_id = forms.CharField(
+        label='Prechange ID',
+        max_length=10)
+
+    postchange_id = forms.CharField(
+        label='Postchange ID',
+        max_length=10)
+
+    csr_ppc_id = forms.CharField(
+        label='CSR ID',
+        max_length=10)
+
+    compare_logic = forms.ChoiceField(
+        label='Compare Logic',
+        choices=(('docId','Document ID'),('masterKey','master key')),
+        required=False)
+
+    pre_env = forms.ChoiceField(
+        label='Pre Environment',
+        choices=(('imstage','imstage'),('prod','prod')),
+        required=False)
+
+    post_env = forms.ChoiceField(
+        label='Post Environment',
+        choices=(('imstage','imstage'),('prod','prod')),
+        required=False)
+
+    unchanged_rows = forms.ChoiceField(
+        label='Unchanged Doc Pairs',
+        choices=(('hide','hide'),('show','show'),('exclude','exclude')),
+        required=False)
+
+    unchanged_cols = forms.ChoiceField(
+        label='Unchanged Doc Props',
+        choices=(('hide','hide'),('show','show'),('exclude','exclude')),
+        required=False)
+
+    masterkey_props = forms.MultipleChoiceField(
+        label='Master Key Props',
+        widget =forms.CheckboxSelectMultiple,
+        choices=(('test', 'test'),('2','2')),
+        required=False
+        )
+
+    spreadsheet_url = forms.CharField(
+        label='Spreadsheet URL (optional)',
+        required=False)
+
     def __init__(self,*args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_class = 'blueForms'
+        #self.helper.form_method = 'post'
         super(PrePostForm, self).__init__(*args, **kwargs)
 
 
@@ -47,39 +94,13 @@ class PrePostForm(forms.Form):
         })
 
         self.fields['pre_env'].widget.attrs.update({
-            'placeholder': '',
+            'placeholder'   : '',
         })
 
         self.fields['post_env'].widget.attrs.update({
             'placeholder': '',
-        })  
+        })
 
         self.fields['spreadsheet_url'].widget.attrs.update({
-            'placeholder': 'spreadsheets/d/1-SWPPRg2i2IsTgUA-4BvpEkMyE1TBZUvmEHZw1zpWo4/edit?usp=drive_web&ouid=116956695434029002425',
-        })
-
-class PrePostOptForm(forms.Form):
-    pre_env = forms.ChoiceField(label='Pre Environment',choices=[('IM','imstage'),('P','prod')])
-    post_env = forms.ChoiceField(label='Post Environment',choices=[('IM','imstage'),('P','prod')])
-
-    def __init__(self,*args, **kwargs):
-        super(PrePostOptForm, self).__init__(*args, **kwargs)
-
-        self.fields['pre_env'].widget.attrs.update({
-            'placeholder': '',
-        })
-
-        self.fields['post_env'].widget.attrs.update({
-            'placeholder': '',
-        })        
-
-class PrePostSubmitForm(forms.Form):
-    spreadsheet_url = forms.CharField(label='Spreadsheet URL')
-
-    def __init__(self,*args, **kwargs):
-        super(PrePostSubmitForm, self).__init__(*args, **kwargs)
-
-        self.fields['spreadsheet_url'].widget.attrs.update({
-            'placeholder': 'spreadsheets/d/1-SWPPRg2i2IsTgUA-4BvpEkMyE1TBZUvmEHZw1zpWo4/edit?usp=drive_web&ouid=116956695434029002425',
-        })
-      
+            'placeholder': 'if this is left blank, a new google spreadsheet will be generated',
+        })    

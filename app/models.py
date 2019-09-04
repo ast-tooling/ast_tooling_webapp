@@ -63,6 +63,9 @@ class PrePostComp(object):
             else:
                 setattr(self, param, optionalParams[param])
 
+        # add google api build obj as class attr
+        self.service = compare.GoogleAPIAuthorization()
+
         # create arguments dict to pass to funcs
         self.arguments = {
             'custId'            : self.csrId,
@@ -71,12 +74,13 @@ class PrePostComp(object):
             'postId'            : self.postchangeId,
             'postEnv'           : self.postEnv,
             'spreadsheetURL'    : self.spreadsheetUrl,
-            'spreadSheetId'     : self.spreadsheetId,
+            'spreadsheetId'     : self.spreadsheetId,
             'compareLogic'      : self.compareLogic,
             'noChangeCols'      : self.noChangeCols,
             'noChangeRows'      : self.noChangeRows,
             'masterKeyProps'    : self.masterKeyProps,
             'ignoredProps'      : self.ignoredProps,
+            'service'           : self.service
         }
 
         # set stacks as class attributes
@@ -103,10 +107,9 @@ class PrePostComp(object):
         # as a part of constructer, connect to databases
         self.mysqlClient = compare.InitSQLClient(dStack=self.stack)
         self.fsidocprops = compare.InitMongoClient()
-        # self.sql_serve_conn = compare.InitSqlServerClient()
 
-        # add google api build obj as class attr
-        self.service = compare.GoogleAPIAuthorization()
+
+        # self.sql_serve_conn = compare.InitSqlServerClient()
 
         # grab coversheet ids
         self.coversheetDocIds = compare.GetCoversheetDocIds(self.mysqlClient,

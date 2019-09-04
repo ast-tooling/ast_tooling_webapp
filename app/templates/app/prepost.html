@@ -1,51 +1,124 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
 {% load crispy_forms_tags %}
+{% crispy form form.helper %}
 
 {% block content %}
-  <h1 style="margin-left:50px;">{{ tool.name }}</h1>
+  
   {% if error_message  %}
     <p><strong>{{ error_message }}</strong></p>
   {% endif %}
   <div class="container">
 
-    <div class="row">
+    <h1 style="margin-left:50px;">{{ tool.name }}</h1>
 
-      <div class="col-3 border-right border-dark">
+
+    <form id="form" class="form" action="{% url 'app:prepost' %}" method="post">
+
+      <div class="row">
+
+        <div class="col-3 border-right border-dark">                 
+          {% csrf_token %}
+          {{form.csr_ppc_id|as_crispy_field}}
+          {{form.prechange_id|as_crispy_field}}
+          {{form.postchange_id|as_crispy_field}}           
+        </div>
+
+        <div class="col-1.5 ml-3">
+          {{form.compare_logic|as_crispy_field}}
+          {{form.pre_env|as_crispy_field}}
+          {{form.post_env|as_crispy_field}} 
+        </div>
+
+        <div class="col-1.5 ml-3">
+
+          {{form.unchanged_rows|as_crispy_field}}
+          {{form.unchanged_cols|as_crispy_field}}           
+        </div>
+
+
+        <div class="col-1.5 ml-3">
+          <button class="btn btn-primary mt-4" type="button" data-toggle="dropdown">Masterkey Props
+              <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu">
+              <div><a href="#">{{form.masterkey_props}}</a></div>
+          </div> 
+        </div> 
+
+      </div>
+
+     
+
+      <div class="row mt-3">
+        <div class="col">
+          {{form.spreadsheet_url|as_crispy_field}}
+          <input type="submit" name="" value="Create That Good Stuff">
+        </div>             
+      </div>
+
+      <div class="row mt-3">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+        </div>
+      </div> 
         
-        <form class="form" action="{% url 'app:prepost' %}" method="post">
-            {% csrf_token %}
-            <!-- {% bootstrap_form form %} -->
-            {{form.csr_ppc_id|as_crispy_field}}
-            {{form.prechange_id|as_crispy_field}}
-            {{form.postchange_id|as_crispy_field}}           
-        </form>
-      </div>
+    </form>
 
+    <ul id='status-list'></ul>
 
-      <div class="col-1.5 ml-3">
-        <form class="form" action="{% url 'app:prepost' %}" method="post">
-            {% csrf_token %}
-            {{form.pre_env|as_crispy_field}}
-            {{form.post_env|as_crispy_field}} 
-        </form>
-      </div>
-    </div>
+    {% if url %}
+    <hr>
+    <h5><a target="_blank" href="{{ url }}">View Results</a></h5>
+    {% endif %}
 
-    <div class="row mt-3">
-      <div class="col">
-        <form class="form" action="{% url 'app:prepost' %}" method="post">
-            {% csrf_token %}
-            {{form.spreadsheet_url|as_crispy_field}}
-            <input type="submit" name="" value="Create That Good Stuff"> 
-        </form>
-      </div>
-    </div>  
-
-        
   </div>
-  {% if url %}
-  <hr>
-  <h5><a target="_blank" href="{{ url }}">Click to open Pre Post Sheet</a></h5>
-  {% endif %}
+
+
+<script>
+
+  var loc = window.location
+  var formData = $('#form')
+  var csrId = $('#id_csr_ppc_id')
+  var preId = $('#id_prechange_id')
+  var postId = $('#id_postchange_id')
+  var url = $('#id_spreadsheet_url')
+  var status_list = $('#status-list')
+
+  var wsStart = loc.protocol == 'https:' ? 'wss://' : 'ws://'
+
+  var endpoint = wsStart + loc.host + loc.pathname
+  var socket = new WebSocket(endpoint)
+
+  socket.onmessage = function(e){
+    console.log("message", e)
+    var currStatus = JSON.parse(e.data)
+    status_list.append('<li>' + currStatus + '</li>')
+  }
+  socket.onopen = function(e){
+    console.log("open", e)
+    formData.submit(function(event){
+      event.preventDefault()
+      //socket.send(formData)
+      var args = {
+        'csrId': csrId.val(),
+        'preId': preId.val(),
+        'postId': postId.val(),
+        'url': url.val()     
+      }
+      socket.send(JSON.stringify(args))
+    })
+
+
+  }
+  socket.onerror = function(e){
+    console.log("wrror", e)
+  }
+  socket.onclose = function(e){
+    console.log("close", e)
+  }
+
+</script>  
+       
+
 {% endblock content %}
