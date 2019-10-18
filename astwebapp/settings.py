@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # add static root to allow collect static command to work
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'app\\static\\app')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'app/static/app')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -28,7 +28,7 @@ SECRET_KEY = '%zu3b4sp%^a(l!cas@i947%!n+#$%gq+**7n((_cmngzl_-_-&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'crispy_forms',
-    'channels'
+    'channels',
+    'astwebapp',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -65,7 +66,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # C:\\Users\\asimon\\Documents\\Python\\Projects\\astwebapp
-        'DIRS': ['.\\app\\templates\\app'],
+        'DIRS': [os.path.join(BASE_DIR,'app/templates/app')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
