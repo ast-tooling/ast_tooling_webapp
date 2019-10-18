@@ -26,6 +26,19 @@ from base64 import b64decode
 from memory_profiler import profile
 from . import sheet_requests
 
+#from ctypes import CDLL, c_char_p
+
+#getenv = CDLL("libc.so.6").getenv
+#getenv.restype = c_char_p
+
+ims_uid = os.environ.get('IM_USER')
+ims_pwd = os.getenv('IM_PWD')
+mongo_uid = os.getenv('MONGO_USER')
+mongo_pwd = os.getenv('MONGO_PWD')
+
+print(f'user set as {ims_uid}')
+print(f'password set as {ims_pwd}')
+
 def fn_timer(function):
     @wraps(function)
     def function_timer(*args, **kwargs):
@@ -40,6 +53,7 @@ def fn_timer(function):
 
 @fn_timer
 def InitSQLClient(dStack={},master=False):
+    '''
     userName = os.getenv('username')
     sqlConnFile = r"C:\\Users\\%s\\AppData\\Roaming\\SQLyog\\sqlyog.ini" % userName
     inFile = open(sqlConnFile, 'rt')
@@ -58,6 +72,7 @@ def InitSQLClient(dStack={},master=False):
             elif line.startswith("Password="):
                 connections[currentConnection]["Password"] = line.split("=")[1].strip()
     inFile.close()
+
     userName = ""
     password = ""
     for connection in connections.values():
@@ -74,34 +89,22 @@ def InitSQLClient(dStack={},master=False):
     # TODO why are we connecting to both stage & prod, should it be a flag?
     # TODO need to figure out a why to have users connect through webserver,
     # probably be generic name
+    '''
     if master:
         imdb_mysqlClient = mysql.connector.connect(
             host="imdb",
-            user=userName,
-            passwd=decodedPassword,
-            database="billingmaster"
-        )
-        reportdb_mysqlClient = mysql.connector.connect(
-            host="reportdb",
-            user=userName,
-            passwd=decodedPassword,
+            user=ims_uid,
+            passwd=ims_pwd,
             database="billingmaster"
         )
     else:
         imdb_mysqlClient = mysql.connector.connect(
             host="imdb",
-            user=userName,
-            passwd=decodedPassword,
+            user=ims_uid,
+            passwd=ims_pwd,
             database=dStack['imdb']
         )
-        reportdb_mysqlClient = mysql.connector.connect(
-            host="reportdb",
-            user=userName,
-            passwd=decodedPassword,
-            database=dStack['reportdb']
-        )
-    mysqlClient =  {"imdb"      : imdb_mysqlClient,
-                    "reportdb"  : reportdb_mysqlClient}
+    mysqlClient = {"imdb"   : imdb_mysqlClient}
     return mysqlClient
 
 @fn_timer
@@ -123,8 +126,8 @@ def InitMongoClient():
                         userName = cred['userName']
                         userPassword = cred['userPassword']
     except:
-        userName = "cweakley"
-        userPassword = "vn6oCdWK"
+        userName = mongo_uid
+        userPassword = mongo_pwd
     # END: GET USER CREDENTIALS #
     #############################
 
