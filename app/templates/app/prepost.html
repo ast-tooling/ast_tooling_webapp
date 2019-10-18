@@ -54,7 +54,10 @@
         <div class="col">
           {{form.spreadsheet_url|as_crispy_field}}
           <input type="submit" name="" value="Create That Good Stuff">
-        </div>             
+        </div> 
+        <div class="col">
+          *required
+        </div>            
       </div>
         
     </form>
@@ -70,6 +73,9 @@
 
 
 <script>
+  if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+  }
 
   /*
   var loc = window.location
