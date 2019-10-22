@@ -31,10 +31,14 @@ from . import sheet_requests
 #getenv = CDLL("libc.so.6").getenv
 #getenv.restype = c_char_p
 
-ims_uid = os.environ.get('IM_USER')
+ims_uid = os.getenv('IM_USER')
+ims_uid = 'imuser'
 ims_pwd = os.getenv('IM_PWD')
+ims_pwd = 'Billtrust1'
 mongo_uid = os.getenv('MONGO_USER')
+mongo_uid = 'cweakley'
 mongo_pwd = os.getenv('MONGO_PWD')
+mongo_pwd = 'vn6oCdWK'
 
 print(f'user set as {ims_uid}')
 print(f'password set as {ims_pwd}')
@@ -90,6 +94,7 @@ def InitSQLClient(dStack={},master=False):
     # TODO need to figure out a why to have users connect through webserver,
     # probably be generic name
     '''
+    master = false
     if master:
         imdb_mysqlClient = mysql.connector.connect(
             host="imdb",

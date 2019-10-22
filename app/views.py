@@ -78,9 +78,9 @@ def prepost(request):
             }
 
             ## TESTING
-            #prePostDocProps = compare.QueryMongo(ppc_obj.fsidocprops, ppc_obj.coversheetDocIds, ppc_obj.arguments)
-            #mergedData = compare.MergeToDataFrame(prePostDocProps[0], prePostDocProps[1], ppc_obj.fsiDocumentInfo, ppc_obj.arguments, ppc_obj.service)
-            #compare.CreateCompareTab(mergedData[0], mergedData[1], mergedData[2], ppc_obj.arguments, ppc_obj.service)
+            prePostDocProps = compare.QueryMongo(ppc_obj.fsidocprops, ppc_obj.coversheetDocIds, ppc_obj.arguments)
+            mergedData = compare.MergeToDataFrame(prePostDocProps[0], prePostDocProps[1], ppc_obj.fsiDocumentInfo, ppc_obj.arguments, ppc_obj.service)
+            compare.CreateCompareTab(mergedData[0], mergedData[1], mergedData[2], ppc_obj.arguments, ppc_obj.service)
 
             # END TESTING
 
