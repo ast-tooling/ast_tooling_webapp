@@ -25,23 +25,15 @@ from base64 import b64decode
 # import pyodbc
 from memory_profiler import profile
 from . import sheet_requests
+import yaml
+
 
 #from ctypes import CDLL, c_char_p
 
 #getenv = CDLL("libc.so.6").getenv
 #getenv.restype = c_char_p
 
-ims_uid = os.getenv('IM_USER')
-ims_uid = 'imuser'
-ims_pwd = os.getenv('IM_PWD')
-ims_pwd = 'Billtrust1'
-mongo_uid = os.getenv('MONGO_USER')
-mongo_uid = 'cweakley'
-mongo_pwd = os.getenv('MONGO_PWD')
-mongo_pwd = 'vn6oCdWK'
 
-print(f'user set as {ims_uid}')
-print(f'password set as {ims_pwd}')
 
 def fn_timer(function):
     @wraps(function)
@@ -94,7 +86,11 @@ def InitSQLClient(dStack={},master=False):
     # TODO need to figure out a why to have users connect through webserver,
     # probably be generic name
     '''
-    master = false
+
+    config = yaml.safe_load(open(os.path.join(os.getcwd(), '..', 'ast_tooling_config.yml')))
+    ims_uid = config['IMSTAGE']['IM_USER']
+    ims_pwd = config['IMSTAGE']['IM_PWD']
+
     if master:
         imdb_mysqlClient = mysql.connector.connect(
             host="imdb",
@@ -116,6 +112,7 @@ def InitSQLClient(dStack={},master=False):
 def InitMongoClient():
     ###############################
     # START: GET USER CREDENTIALS #
+    '''
     userName = os.getenv('username')
     userPassword = ''
     roboPath = "C:\\Users\\%s\\.3T\\robo-3t\\1.3.1\\robo3t.json" % userName
@@ -135,7 +132,10 @@ def InitMongoClient():
         userPassword = mongo_pwd
     # END: GET USER CREDENTIALS #
     #############################
-
+    '''
+    config = yaml.safe_load(open(os.path.join(os.getcwd(), '..', 'ast_tooling_config.yml')))
+    userName = config['IMSTAGE']['MONGO_USER']
+    userPassword = config['IMSTAGE']['MONGO_PWD']
     ##################################
     # START: CONNECT TO MONGO CLIENT #
     print ("Connecting to mongo client...")
