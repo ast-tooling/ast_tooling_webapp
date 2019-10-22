@@ -75,6 +75,7 @@ def prepost(request):
             context = {
                 'url'       : url+'&key='+API_KEY,
                 'form'      : form,
+                'tool'      : tool,
             }
 
             ## TESTING
