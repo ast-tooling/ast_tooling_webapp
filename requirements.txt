@@ -4,7 +4,7 @@ cachetools==3.1.1
 celery==4.3.0
 certifi==2019.3.9
 chardet==3.0.4
-Django==2.2.3
+Django==2.1.13
 django-bootstrap4==0.0.8
 django-channels==0.7.0
 django-crispy-forms==1.8.0

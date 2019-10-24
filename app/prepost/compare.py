@@ -26,6 +26,8 @@ from base64 import b64decode
 from memory_profiler import profile
 from . import sheet_requests
 import yaml
+from django.conf import settings
+from pathlib import Path
 
 
 #from ctypes import CDLL, c_char_p
@@ -86,8 +88,8 @@ def InitSQLClient(dStack={},master=False):
     # TODO need to figure out a why to have users connect through webserver,
     # probably be generic name
     '''
-
-    config = yaml.safe_load(open(os.path.join(os.getcwd(), '..', 'ast_tooling_config.yml')))
+    config = yaml.safe_load(open(os.path.join(Path(__file__).parents[3], 'ast_tooling_config.yml')))
+    #config = yaml.safe_load(open(os.path.join(os.path.dirname(__file__), '..', 'ast_tooling_config.yml')))
     ims_uid = config['IMSTAGE']['IM_USER']
     ims_pwd = config['IMSTAGE']['IM_PWD']
 
@@ -133,9 +135,11 @@ def InitMongoClient():
     # END: GET USER CREDENTIALS #
     #############################
     '''
-    config = yaml.safe_load(open(os.path.join(os.getcwd(), '..', 'ast_tooling_config.yml')))
+    config = yaml.safe_load(open(os.path.join(Path(__file__).parents[3], 'ast_tooling_config.yml')))
     userName = config['IMSTAGE']['MONGO_USER']
     userPassword = config['IMSTAGE']['MONGO_PWD']
+    prodUser = config['PROD']['MONGO_USER']
+    prodPassword = config['PROD']['MONGO_PWD']
     ##################################
     # START: CONNECT TO MONGO CLIENT #
     print ("Connecting to mongo client...")
@@ -148,7 +152,7 @@ def InitMongoClient():
 
     reportdb_MongoClient = MongoClient(["prmreportdb01:10001"],
                                             userName = userName,
-                                            password = 'gEvSnvCy',
+                                            password = '',
                                             authSource = 'docpropsdb',
                                             authMechanism = 'SCRAM-SHA-1')
     reportdb_fsidocprops = reportdb_MongoClient.docpropsdb.fsidocprops
