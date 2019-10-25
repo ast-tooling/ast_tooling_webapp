@@ -15,25 +15,33 @@
 
     <form id="form" class="form" action="{% url 'app:prepost' %}" method="post">
 
+      <div class="row border-top border-bottom border-gray pt-2 mb-2">
+        <p>
+          Prepost Compare attempts to take two batches, match up documents and show what changed between them. The output is sent to Google Sheets and everything that changed between batches is highlighted in red. The tool works best when the same exact files are ran in both batches so that the file names are consistent and there are the same number of documents in each batch. If you find any issues, have improvement suggestions or want to see a particular feature added, please contact cweakley@billtrust.com and asimon@billtrust.com. <a target="_blank" href="https://billtrust.atlassian.net/wiki/spaces/AT/pages/771129524/Prepost+Compare+Documentation">See confluence for full documentation.</a></h>
+        </p>  
+      </div>
+
+            
+
       <div class="row">
 
         <div class="col-3 border-right border-dark">                 
           {% csrf_token %}
-          {{form.csr_ppc_id|as_crispy_field}}
-          {{form.prechange_id|as_crispy_field}}
-          {{form.postchange_id|as_crispy_field}}           
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Numeric CSR ID, ex: 2179">{{form.csr_ppc_id|as_crispy_field}}</a>
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Prechange Batch ID">{{form.prechange_id|as_crispy_field}}</a>
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Postchange Batch ID">{{form.postchange_id|as_crispy_field}}</a>           
         </div>
 
         <div class="col-1.5 ml-3">
-          {{form.compare_logic|as_crispy_field}}
-          {{form.pre_env|as_crispy_field}}
-          {{form.post_env|as_crispy_field}} 
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Match documents between batches using a master key or by sorted document id order.">{{form.compare_logic|as_crispy_field}}</a>
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Environment that the prechange batch is from.">{{form.pre_env|as_crispy_field}}</a>
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Environment that the postchange batch is from.">{{form.post_env|as_crispy_field}}</a> 
         </div>
 
         <div class="col-1.5 ml-3 align-self-end">
 
-          {{form.unchanged_rows|as_crispy_field}}
-          {{form.unchanged_cols|as_crispy_field}}           
+          <a class="text-dark" href="#" data-toggle="tooltip" title="How to handle doc prop pairs (rows) that were not changed between batches.">{{form.unchanged_rows|as_crispy_field}}</a>
+          <a class="text-dark" href="#" data-toggle="tooltip" title="How to handle document properties (columns) that were not changed for all documents between batches.">{{form.unchanged_cols|as_crispy_field}}</a>           
         </div>
 
 
@@ -46,18 +54,13 @@
           </div> 
         </div>  -->
 
-      </div>
-
-     
+      </div>    
 
       <div class="row mt-3">
         <div class="col">
-          {{form.spreadsheet_url|as_crispy_field}}
+          <a class="text-dark" href="#" data-toggle="tooltip" title="Google Sheets URL where the compare should display, only used if you have a pre-existing Google Sheet that you want to add to.  If left blank, a new spreadsheet will be created.">{{form.spreadsheet_url|as_crispy_field}}</a>
           <input type="submit" name="" value="Create That Good Stuff">
-        </div> 
-        <div class="col">
-          *required
-        </div>            
+        </div>           
       </div>
         
     </form>
