@@ -71,7 +71,7 @@ def prepost(request):
                                   int(form.cleaned_data['postchange_id']),
                                   int(form.cleaned_data['csr_ppc_id']),
                                   ssUrl=form.cleaned_data['spreadsheet_url'])
-            url = ppc_obj.spreadsheetUrl            
+            url = ppc_obj.spreadsheetUrl
             context = {
                 'url'       : url+'&key='+API_KEY,
                 'form'      : form,
@@ -102,3 +102,6 @@ def thanks(request):
 
 def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
+
+def gmc(request):
+    return render(request, 'app/gmc_index.html')
