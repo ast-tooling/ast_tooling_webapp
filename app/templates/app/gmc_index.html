@@ -1,8 +1,29 @@
 {% extends "base.html" %}
 {% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
-{% block javascript%}
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $("#cust_name_id").hide();
+        $("#cust_name_id").change(function () {
+            console.log("hey im in the log");
+        });
+    });
+</script>
 
-{% endblock %}
+{% block content %}
+  <h1 style="margin-left:50px;">{{ tool.name }}</h1>
+  {% if error_message  %}
+    <p><strong>{{ error_message}}</strong></p>
+  {% endif %}
+  <div class="container">
+    <form class="form" action="{% url 'app:vft' %}" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" name="" value="Hey Mikey, I think he likes it">
+    </form>
+  </div>
+{% endblock content %}

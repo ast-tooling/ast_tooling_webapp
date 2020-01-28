@@ -5,7 +5,7 @@ from django.urls import reverse
 from celery import task
 
 from .models import Tool,PrePostComp
-from .forms import VftForm,PrePostForm
+from .forms import VftForm,PrePostForm,GMCForm
 from .prepost import compare
 from .prepost import sheet_requests
 
@@ -104,4 +104,10 @@ def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
 
 def gmc(request):
-    return render(request, 'app/gmc_index.html')
+    tool = Tool.objects.filter(name='GMC Transparency 3000').values()[0]
+    form = GMCForm()
+    context = {
+        'form'    : form,
+        'tool'    : tool
+    }
+    return render(request, 'app/gmc_index.html', context)

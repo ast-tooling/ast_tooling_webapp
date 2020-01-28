@@ -22,10 +22,21 @@ class VftForm(forms.Form):
         self.fields['name'].widget.attrs.update({
             'placeholder': '',
         })
+FFDIDS = ['12345','456789','33421']
+class GMCForm(forms.Form):
+    cust_name = forms.CharField(label='CustomerName')
+    ffdid = forms.CharField(label='FFDId')
+
+    def __init__(self, *args, **kwargs):
+        super(GMCForm,self).__init__(*args, **kwargs)
+
+        self.fields['cust_name'].widget.attrs.update({
+            'id': 'cust_name_id'
+        })
 
 
 class PrePostForm(forms.Form):
-    
+
     prechange_id = forms.CharField(
         label='Prechange ID',
         max_length=10)
@@ -103,4 +114,4 @@ class PrePostForm(forms.Form):
 
         self.fields['spreadsheet_url'].widget.attrs.update({
             'placeholder': 'if this is left blank, a new google spreadsheet will be generated',
-        })    
+        })
