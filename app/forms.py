@@ -33,6 +33,9 @@ class GMCForm(forms.Form):
         self.fields['cust_name'].widget.attrs.update({
             'id': 'cust_name_id'
         })
+        self.fields['ffdid'].widget.attrs.update({
+            'id': 'ffd_id'
+        })
 
 
 class PrePostForm(forms.Form):

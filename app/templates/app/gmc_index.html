@@ -5,14 +5,8 @@
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
-<script type='text/javascript'>
-    $(document).ready(function(){
-        $("#cust_name_id").hide();
-        $("#cust_name_id").change(function () {
-            console.log("hey im in the log");
-        });
-    });
-</script>
+
+
 
 {% block content %}
   <h1 style="margin-left:50px;">{{ tool.name }}</h1>
@@ -26,4 +20,17 @@
         <input type="submit" name="" value="Hey Mikey, I think he likes it">
     </form>
   </div>
+
+
+<script type="text/javascript">
+  $(function(){
+    $(document).ready(function(){
+      console.log("hey im in the log");
+        $("#ffd_id, label[for='ffd_id']").hide();
+        $("#cust_name_id").change(function () {
+            console.log("hey im in the log");
+        });
+    });
+    });
+</script>
 {% endblock content %}
