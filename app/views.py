@@ -111,3 +111,7 @@ def gmc(request):
         'tool'    : tool
     }
     return render(request, 'app/gmc_index.html', context)
+
+def gmc_details(request, cust_id, ffd_id):
+
+    return render(request, 'app/gmc_details.html', context)

@@ -122,3 +122,21 @@ class PrePostComp(object):
     def __repr__(self):
         return '<PrePost Object using pre as %s and post as %s for csr id %s>'  \
         '' % (self.prechangeId, self.postchangeId, self.csrId)
+
+    class GMCCustomer(models.Model):
+        cust_name = models.CharField(max_length=50)
+        cust_id = models.IntegerField()
+        cust_update = models.DateField(auto_now=True)
+        # add list of ffdids as field?
+
+    class GMCTemplate(models.Model):
+        ffd_id = models.IntegerField()
+        ffd_name = models.CharField(max_length=100)
+        wfd_input_type = models.CharField(max_length=50)
+        wfd_input_name = models.CharField(max_length=50)
+        wfd_name = models.CharField(max_length=50)
+        wfd_multiple_records = BooleanField()
+        wfd_delimiter = CharField(max_length=2)
+        wfd_text_qualifier = CharField(max_length=2)
+        wfd_props = Textfield()
+        gmcustomer = models.ForeignKey(GMCCustomer, on_delete = models.CASCADE)
