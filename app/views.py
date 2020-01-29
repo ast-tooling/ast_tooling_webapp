@@ -105,12 +105,24 @@ def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
 
 def gmc(request):
-    tool = Tool.objects.filter(name='GMC Transparency 3000').values()[0]
-    form = GMCForm()
-    context = {
-        'form'    : form,
-        'tool'    : tool
-    }
+    if request.method == "POST"
+        form = GMCForm(request.POST)
+        if form.is_valid():
+            strname = form.cleaned_data['cust_name']
+            strffdid = form.cleaned_data['ffdid']
+            gmccust = GMCCustomer.objects.get(name=strname)
+            context = {
+                'form'      : form,
+                'tool'      : tool,
+                'ffdid'     : strffdid,
+                'cust_name' : strname
+            }
+        else:
+            context = {
+                'form'    : form,
+                'tool'    : tool
+            }
+            HttpResponseRedirect('/no_bueno/')
     return render(request, 'app/gmc_index.html', context)
 
 def gmc_details(request, cust_id, ffd_id):
