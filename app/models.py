@@ -123,20 +123,19 @@ class PrePostComp(object):
         return '<PrePost Object using pre as %s and post as %s for csr id %s>'  \
         '' % (self.prechangeId, self.postchangeId, self.csrId)
 
-    class GMCCustomer(models.Model):
-        cust_name = models.CharField(max_length=50)
-        cust_id = models.IntegerField()
-        cust_update = models.DateField(auto_now=True)
-        # add list of ffdids as field?
+class GMCCustomer(models.Model):
+    cust_name = models.CharField(max_length=50)
+    cust_id = models.IntegerField()
+    cust_update = models.DateField(auto_now=True)
 
-    class GMCTemplate(models.Model):
-        ffd_id = models.IntegerField()
-        ffd_name = models.CharField(max_length=100)
-        wfd_input_type = models.CharField(max_length=50)
-        wfd_input_name = models.CharField(max_length=50)
-        wfd_name = models.CharField(max_length=50)
-        wfd_multiple_records = models.BooleanField()
-        wfd_delimiter = models.CharField(max_length=2)
-        wfd_text_qualifier = models.CharField(max_length=2)
-        wfd_props = models.TextField()
-        gmccustomer = models.ForeignKey('GMCCustomer', on_delete = models.CASCADE)
+class GMCTemplate(models.Model):
+    ffd_id = models.IntegerField()
+    ffd_name = models.CharField(max_length=100)
+    wfd_input_type = models.CharField(max_length=50)
+    wfd_input_name = models.CharField(max_length=50)
+    wfd_name = models.CharField(max_length=50)
+    wfd_multiple_records = models.BooleanField()
+    wfd_delimiter = models.CharField(max_length=2)
+    wfd_text_qualifier = models.CharField(max_length=2)
+    wfd_props = models.TextField()
+    gmccustomer = models.ForeignKey('GMCCustomer', on_delete = models.CASCADE)

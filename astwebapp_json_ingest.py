@@ -1,7 +1,13 @@
+import django
 import json
 import os
 
-from app.models import GMCCustomer, GMCTemplate
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "astwebapp.settings")
+django.setup()
+
+# from django.db import models
+from app.models import GMCTemplate, GMCTemplate
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSON_DIR = os.path.join(BASE_DIR, 'json_dumps')
