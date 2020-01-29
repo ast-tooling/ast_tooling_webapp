@@ -179,7 +179,7 @@ def InitSqlServerConn(server='dnco-stc2bsql.billtrust.local',database='carixData
     print('Connected, cursor object returned...')
     #   END: CONNECT TO SQL SERVER   #
     ##################################
-    
+
 @fn_timer
 def decode_password(encoded):
     # print('encoded password is %s' % encoded)
@@ -218,7 +218,7 @@ def GetCoversheetDocIds(mysqlClient, arguments):
         # convert from tuple generator of Longs to Int list
         # TODO - would it be better to pass the cursor around until we need to access the results to prevent memory limits?
         coversheetDocIds[preOrPost] = list(int(i[0]) for i in mysqlCursor.fetchall())
-        preOrPost = "postchange"   
+        preOrPost = "postchange"
     return (coversheetDocIds)
 
 @fn_timer
@@ -333,13 +333,13 @@ def AddChangedCellLink(service, changedDocProps, sheetId, sheetName, arguments):
             firstChangeA1 = GetA1Notation(changedDocProps[changedProp]["column"], changedDocProps[changedProp]["row"])
             colLabelA1 = GetA1Notation(changedDocProps[changedProp]["column"], 0)
             value = "=HYPERLINK(\"%s&range=%s\", \"%s\")" % (url, firstChangeA1, "Find Change")
-            UpdateSingleRange(service, [[value,]], colLabelA1, sheetName, arguments['spreadsheetId'], value_input_option="USER_ENTERED")    
+            UpdateSingleRange(service, [[value,]], colLabelA1, sheetName, arguments['spreadsheetId'], value_input_option="USER_ENTERED")
 
 
 def GetA1Notation(columnIndex, rowIndex):
     quot, rem = divmod(columnIndex, 26)
     return((chr(quot-1 + ord('A')) if quot else '') +
-           (chr(rem + ord('A')) + str(rowIndex+1)))    
+           (chr(rem + ord('A')) + str(rowIndex+1)))
 
 
 @fn_timer
@@ -362,7 +362,7 @@ def MergeBatchData(prechangeProps, postchangeProps, fsiDocumentInfo, arguments):
     docPropLabels = ["FFDID", "BT_ROUTE", "PAGECOUNT"]
 
     prechangeProps = list(prechangeProps)
-    postchangeProps = list(postchangeProps)    
+    postchangeProps = list(postchangeProps)
 
     # Add all doc props from our prechange and postchange batches to a list of doc prop names
     for batch in (prechangeProps, postchangeProps):
@@ -565,7 +565,7 @@ def MergeToDataFrame(prechangePropsGen, postchangePropsGen, fsiDocumentInfo, arg
                         #print("Found first col prop, breaking properties loop at: %s, Line: %s" % (docPropName, prop.get('s')))
                         break
                     elif "vref" in prop: #vref props are too large to store in regular mongo documents so we skip them
-                        pass    
+                        pass
                     elif docPropName not in arguments['ignoredProps']:
                         if not bFoundFileName:  # ASK ABOUT PERFORMANCE OF THIS TYPE OF IF STRUCTURE
                             if docPropName == "FILENAME":
@@ -579,7 +579,7 @@ def MergeToDataFrame(prechangePropsGen, postchangePropsGen, fsiDocumentInfo, arg
                                     # There can be a null value for 'v' so we need to catch the error
                                     # ex: db.getCollection('fsidocprops').find({'customerId':2496, 'batchId':13855795, 'documentId': 4392914925})
                                 #    docProps[docPropName] = ''
-                                       
+
                         else:
                             docProps[docPropName] = prop.get('v').replace('<BR>', '\n')[:5000]
                         # Create a list of all unique doc prop names across both pre and post
@@ -641,8 +641,8 @@ def MergeToDataFrame(prechangePropsGen, postchangePropsGen, fsiDocumentInfo, arg
                         propList.append(postchangeProps[fileName][docId][docPropLabel])
                     else:
                         propList.append("")
-     
-                masterPropList[i] = propList 
+
+                masterPropList[i] = propList
                 i += 2
 
     for fileName in postchangeProps:
@@ -698,7 +698,7 @@ def CreateCompareTab(docPropLabels, masterPropList, batchInfo, arguments, servic
     currentRowNum = 3
     startColIndex = 2
     currentColIndex = 2
-    
+
     #print(masterPropList)
 
     endColIndex = startColIndex + len(masterPropList[0]) - 1 # subract 2 because we dont include docid or pre/post number
@@ -1151,7 +1151,7 @@ def CreateDPCompareTab(docPropLabels, masterPropList, misMatchCount, numOfPreDoc
         print("Hiding cols that saw no change from pre to post...")
         requests = sheet_requests.HideNoChangeCols(noChangeHideCol, sheetId)
         if requests != []:
-            SendUpdateRequests(service, requests, spreadsheetId)  
+            SendUpdateRequests(service, requests, spreadsheetId)
 
     #print("Adding summary information...")
     #summaryStatement = "Prechange Document Count: %s | Postchange Document Count: %s | Number of Mismatched Documents: %s | Number of Pairs with Change: %s" \

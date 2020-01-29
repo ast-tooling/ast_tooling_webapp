@@ -23,14 +23,12 @@
 
 
 <script type="text/javascript">
-  $(function(){
     $(document).ready(function(){
-      console.log("hey im in the log");
+      console.log("jquery is loading");
         $("#ffd_id, label[for='ffd_id']").hide();
         $("#cust_name_id").change(function () {
-            console.log("hey im in the log");
+            console.log($(this).val());
         });
-    });
     });
 </script>
 {% endblock content %}

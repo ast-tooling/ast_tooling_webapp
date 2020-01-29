@@ -115,3 +115,9 @@ def gmc(request):
 def gmc_details(request, cust_id, ffd_id):
 
     return render(request, 'app/gmc_details.html', context)
+
+def pull_current_uses_gmc(request):
+    query = 'SELECT DISTINCT CustomerId FROM fsiffd where UsesGMC = Y'
+    conn = compare.InitSQLClient()
+    curs = conn.cursor()
+    curs.execute(query)

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'channels',
     'astwebapp',
+    'app'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
