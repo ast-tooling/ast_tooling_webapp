@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+ol {
+  background: #ff9999;
+  padding: 20px;
+}
+
+
+
+
+{% block content %}
+
+<marquee behavior="scroll" direction="left">GMC TRANSPARENCY 3000!!!!!!!!</marquee>
+  <h1 style="margin-left:50px; text-align:center;">{{GMCCustomer.cust_name}} - {{GMCCustomer.cust_id}}</h1>
+    <h2 style="margin-left:50px;">Template {{GMCTemplate.ffd_name}} ({{GMCTemplate.ffd_id}}) Information</h2>
+    <div class="container">
+      <ul>
+        <li>WFD Name - {{GMCTemplate.wfdname}}   (GMC Worflow Name)</li>
+        <li>WFD Input Type - {{GMCTemplate.wfd_input_type}}   (Data Input Module Type)</li>
+        <li>WFD Input Name - {{GMCTemplate.wfd_input_name}}   (GMC Worflow Name)</li>
+        <li>Data File Delimeter Type - {{GMCTemplate.wfd_delimiter}}   (Customer data file delimeter)</li>
+        <li>Data File Text Qualifier Type - {{GMCTemplate.wfd_text_qualifier}}</li>      
+      </ul>
+    </div>
+  {% if error_message  %}
+    <p><strong>{{ error_message}}</strong></p>
+  {% endif %}
+
+
+
+{% endblock content %}

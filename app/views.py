@@ -127,7 +127,13 @@ def gmc(request):
     return render(request, 'app/gmc_index.html', context)
 
 def gmc_details(request, cust_id, ffd_id):
+    gmc_custID = GMCCustomer.objects.filter(name = cust_id).values()[0]
+    gmc_custTempID = GMCTemplate.objects.filter(name = ffd_id).values()[0]
 
+    context = {
+        'gmc_custID'    : gmc_custID,
+        'gmc_custTempID': gmc_custTempID
+    }
     return render(request, 'app/gmc_details.html', context)
 
 def pull_current_uses_gmc(request):
