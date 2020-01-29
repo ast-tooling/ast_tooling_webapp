@@ -3,8 +3,9 @@ from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from celery import task
+import json
 
-from .models import Tool,PrePostComp
+from .models import Tool,PrePostComp, GMCCustomer
 from .forms import VftForm,PrePostForm,GMCForm
 from .prepost import compare
 from .prepost import sheet_requests
@@ -117,7 +118,15 @@ def gmc_details(request, cust_id, ffd_id):
     return render(request, 'app/gmc_details.html', context)
 
 def pull_current_uses_gmc(request):
-    query = 'SELECT DISTINCT CustomerId FROM fsiffd where UsesGMC = Y'
-    conn = compare.InitSQLClient()
-    curs = conn.cursor()
-    curs.execute(query)
+    if request.is_ajax():
+        q = request.GET.get('term', '').capitalize()
+        search_qs = GMCCustomer.objects.filter(cust_name__startswith=q)
+        results = []
+        # print q
+        for r in search_qs:
+            results.append(r.cust_name)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)   
