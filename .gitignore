@@ -5,6 +5,7 @@ astwebapp/astwebapp/__pycache__/*.pyc
 *.csv
 *.pickle
 *.json
+*.sqlite3
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
