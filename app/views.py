@@ -105,7 +105,7 @@ def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
 
 def gmc(request):
-    if request.method == "POST"
+    if request.method == "POST":
         form = GMCForm(request.POST)
         if form.is_valid():
             strname = form.cleaned_data['cust_name']
@@ -118,11 +118,12 @@ def gmc(request):
                 'cust_name' : strname
             }
         else:
-            context = {
-                'form'    : form,
-                'tool'    : tool
-            }
             HttpResponseRedirect('/no_bueno/')
+    else:
+        form = GMCForm()
+        context = {
+            'form'    : form
+        }
     return render(request, 'app/gmc_index.html', context)
 
 def gmc_details(request, cust_id, ffd_id):
@@ -141,4 +142,4 @@ def pull_current_uses_gmc(request):
     else:
         data = 'fail'
     mimetype = 'application/json'
-    return HttpResponse(data, mimetype)   
+    return HttpResponse(data, mimetype)
