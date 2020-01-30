@@ -24,11 +24,12 @@
   </div>
 
 {% if gmctemp %}
+  {% for temp in gmctemp %}
   <div class="container" id="results">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><a class="text-decoration-none text-monospace font-weight-bold" href="/gmc/{{ gmccust.cust_id }}/{{ gmctemp.ffd_id }}">{{ gmctemp.ffd_id }}</a></li>
+        <li class="list-group-item"><a class="text-decoration-none text-monospace font-weight-bold" href="/gmc/{{ gmccust.cust_id }}/{{ temp.ffd_id }}">{{ temp.ffd_id }}</a></li>
       </ul>
-
+  {% endfor %}
   </div>
 {% endif %}
 

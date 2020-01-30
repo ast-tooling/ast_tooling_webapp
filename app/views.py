@@ -111,8 +111,8 @@ def gmc_index(request):
         if form.is_valid():
             strname = form.cleaned_data['cust_name']
             # strffdid = form.cleaned_data['ffdid']
-            gmccust = GMCCustomer.objects.get(cust_name=strname)
-            gmctemp = GMCTemplate.objects.select_related('gmccustomer').get(id=gmccust.id)
+            gmccust = GMCCustomer.objects.filter(cust_name=strname).distinct()
+            gmctemp = GMCTemplate.objects.select_related('gmccustomer').filter(id=gmccust[0].id)
             # TODO test mutiple template for 1 cust, how does that return
             context = {
                 'form'      : form,
