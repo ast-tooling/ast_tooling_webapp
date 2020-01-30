@@ -25,7 +25,7 @@ class VftForm(forms.Form):
 FFDIDS = ['12345','456789','33421']
 class GMCForm(forms.Form):
     cust_name = forms.CharField(label='CustomerName')
-    ffdid = forms.CharField(label='FFDId')
+    # ffdid = forms.CharField(label='FFDId')
 
     def __init__(self, *args, **kwargs):
         super(GMCForm,self).__init__(*args, **kwargs)
@@ -33,9 +33,11 @@ class GMCForm(forms.Form):
         self.fields['cust_name'].widget.attrs.update({
             'id': 'cust_name_id'
         })
+        '''
         self.fields['ffdid'].widget.attrs.update({
             'id': 'ffd_id'
         })
+        '''
 
 
 class PrePostForm(forms.Form):

@@ -5,7 +5,7 @@ from django.urls import reverse
 from celery import task
 import json
 
-from .models import Tool,PrePostComp, GMCCustomer
+from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate
 from .forms import VftForm,PrePostForm,GMCForm
 from .prepost import compare
 from .prepost import sheet_requests
@@ -104,35 +104,42 @@ def thanks(request):
 def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
 
-def gmc(request):
-    if request.method == "POST":
+def gmc_index(request):
+    tool = Tool.objects.filter(name='GMC Transparency 3000').values()[0]
+    if request.method == 'POST':
         form = GMCForm(request.POST)
         if form.is_valid():
             strname = form.cleaned_data['cust_name']
-            strffdid = form.cleaned_data['ffdid']
-            gmccust = GMCCustomer.objects.get(name=strname)
+            # strffdid = form.cleaned_data['ffdid']
+            gmccust = GMCCustomer.objects.get(cust_name=strname)
+            gmctemp = GMCTemplate.objects.select_related('gmccustomer').get(id=gmccust.id)
+            # TODO test mutiple template for 1 cust, how does that return
             context = {
                 'form'      : form,
                 'tool'      : tool,
-                'ffdid'     : strffdid,
-                'cust_name' : strname
+                'gmctemp'   : gmctemp,
+                'cust_name' : strname,
+                'gmccust'   : gmccust
             }
+            # return HttpResponseRedirect('/gmc/{cust_id}/{ffdid}'.format(cust_id=gmccust.cust_id, ffdid=strffdid))
+            return render(request, 'app/gmc_index.html', context)
         else:
-            HttpResponseRedirect('/no_bueno/')
+            return HttpResponseRedirect('/no_bueno/')
     else:
         form = GMCForm()
         context = {
-            'form'    : form
+            'form'    : form,
+            'tool'    : tool,
         }
     return render(request, 'app/gmc_index.html', context)
 
 def gmc_details(request, cust_id, ffd_id):
-    gmc_custID = GMCCustomer.objects.filter(name = cust_id).values()[0]
-    gmc_custTempID = GMCTemplate.objects.filter(name = ffd_id).values()[0]
+    gmc_cust = GMCCustomer.objects.filter(cust_id = cust_id).values()[0]
+    gmc_template = GMCTemplate.objects.filter(ffd_id = ffd_id).values()[0]
 
     context = {
-        'gmc_custID'    : gmc_custID,
-        'gmc_custTempID': gmc_custTempID
+        'gmc_cust'    : gmc_cust,
+        'gmc_template': gmc_template
     }
     return render(request, 'app/gmc_details.html', context)
 

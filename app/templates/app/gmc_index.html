@@ -5,11 +5,8 @@
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
-
-
-
 {% block content %}
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" /> 
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
 
@@ -19,18 +16,26 @@
     <p><strong>{{ error_message}}</strong></p>
   {% endif %}
   <div class="container">
-    <form class="form" action="{% url 'app:gmc_search' %}" method="post">
+    <form id="form" class="form" action="{% url 'app:gmc_index' %}" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input type="submit" name="" value="Hey Mikey, I think he likes it">
+        <input type="submit" name="" value="Send the Hotsauce">
     </form>
   </div>
 
+{% if gmctemp %}
+  <div class="container" id="results">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a class="text-decoration-none text-monospace font-weight-bold" href="/gmc/{{ gmccust.cust_id }}/{{ gmctemp.ffd_id }}">{{ gmctemp.ffd_id }}</a></li>
+      </ul>
+
+  </div>
+{% endif %}
 
 <script type="text/javascript">
     $(document).ready(function(){
       console.log("jquery is loading");
-        $("#ffd_id, label[for='ffd_id']").hide();
+        // $("#ffd_id, label[for='ffd_id']").hide();
         $("#cust_name_id").change(function () {
             console.log($(this).val());
         });
@@ -46,6 +51,6 @@
           });
 
 
-    });    
+    });
 </script>
 {% endblock content %}
