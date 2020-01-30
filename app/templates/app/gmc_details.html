@@ -18,14 +18,44 @@ ol {
   <h1 style="margin-left:50px; text-align:center;">{{ gmc_cust.cust_name }} - {{ gmc_cust.cust_id }}</h1>
     <h2 style="margin-left:50px;">Template {{gmc_template.ffd_name}} ({{gmc_template.ffd_id}}) Information</h2>
     <div class="container">
-      <ul>
-        <li>WFD Name - {{gmc_template.wfd_name}}   (GMC Worflow Name)</li>
-        <li>WFD Input Type - {{gmc_template.wfd_input_type}}   (Data Input Module Type)</li>
-        <li>WFD Input Name - {{gmc_template.wfd_input_name}}   (GMC Worflow Name)</li>
-        <li>Data File Delimeter Type - {{gmc_template.wfd_delimiter}}   (Customer data file delimiter)</li>
-        <li>Data File Text Qualifier Type - {{gmc_template.wfd_text_qualifier}}</li>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">WFD Name - {{gmc_template.wfd_name}}   (GMC Worflow Name)</li>
+        <li class="list-group-item">WFD Input Type - {{gmc_template.wfd_input_type}}   (Data Input Module Type)</li>
+        <li class="list-group-item">WFD Input Name - {{gmc_template.wfd_input_name}}   (GMC Worflow Name)</li>
+        {% if gmc_template.wfd_delimiter != "" %}
+            {% if gmc_template.wfd_delimiter == "&Tab;" %}
+                <li class="list-group-item">>Data File Delimiter Type - tab (Customer data file delimiter)</li>
+            {% else %}
+                <li class="list-group-item">Data File Delimiter Type - {{gmc_template.wfd_delimiter}} (Customer data file delimiter)</li>
+            {% endif %}
+        {% endif %}
+        {% if gmc_template.wfd_text_qualifier != "" %}
+            <li class="list-group-item">Data File Text Qualifier Type - {{gmc_template.wfd_text_qualifier}}</li>
+        {% endif %}
       </ul>
     </div>
+    {% if props %}
+    <div class="container">
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">WFD Properties</a>
+            <div class="collapse" id="collapseExample">
+                <br>
+                <ul class="list-group" id="props-list">
+                  {% for item in props.record_type %}
+                      {% for i in item.prop %}
+                          {% for k,v in i.items %}
+                            <li class="list-group-item card card-body">{{k}} :: {{v}}</li>
+                          {% endfor %}
+                      {% endfor %}
+                  {% endfor %}
+                <ul>
+            </div>
 
+    </div>
+    {% endif %}
+
+    <script type="text/javascript">
+
+
+    </script>
 
 {% endblock content %}

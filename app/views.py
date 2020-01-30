@@ -111,8 +111,8 @@ def gmc_index(request):
         if form.is_valid():
             strname = form.cleaned_data['cust_name']
             # strffdid = form.cleaned_data['ffdid']
-            gmccust = GMCCustomer.objects.filter(cust_name=strname).distinct()
-            gmctemp = GMCTemplate.objects.select_related('gmccustomer').filter(id=gmccust[0].id)
+            gmccust = GMCCustomer.objects.get(cust_name=strname)
+            gmctemp = GMCTemplate.objects.select_related('gmccustomer').filter(gmccustomer_id__exact=gmccust.id)
             # TODO test mutiple template for 1 cust, how does that return
             context = {
                 'form'      : form,
@@ -136,10 +136,12 @@ def gmc_index(request):
 def gmc_details(request, cust_id, ffd_id):
     gmc_cust = GMCCustomer.objects.filter(cust_id = cust_id).values()[0]
     gmc_template = GMCTemplate.objects.filter(ffd_id = ffd_id).values()[0]
+    props = json.loads(gmc_template['wfd_props'].replace('\'','"'))
 
     context = {
         'gmc_cust'    : gmc_cust,
-        'gmc_template': gmc_template
+        'gmc_template': gmc_template,
+        'props'       : props,
     }
     return render(request, 'app/gmc_details.html', context)
 
