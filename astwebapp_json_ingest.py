@@ -11,6 +11,7 @@ from app.models import GMCCustomer, GMCTemplate
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSON_DIR = os.path.join(BASE_DIR, 'json_dumps')
+ARCHIVE_DIR = os.path.join(JSON_DIR, 'archive')
 
 def gather_filenames(dir):
     json_files = []
@@ -48,8 +49,9 @@ def parse_json(json_file):
     return None
 
 if __name__ == '__main__':
-    # print(JSON_DIR)
+
     l_files = gather_filenames(JSON_DIR)
-    # print(l_files)
+
     for f in l_files:
         parse_json(f)
+        os.rename(f,os.path.join(ARCHIVE_DIR, f))
