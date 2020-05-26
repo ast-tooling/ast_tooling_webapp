@@ -1,5 +1,4 @@
-# ast_tooling_webapp
-Web app that provides UI for various ast tools
+# BRD Buddy
  BRD Buddy is an app that automatically loads majority of configurations from BRDs. 
  
  Go to "Load a New Survey" and enter the survey ID and customer ID to do.
