@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block content %}
+
+{% if error_message  %}
+<p><strong>{{ error_message }}</strong></p>
+{% endif %}
+<div class="container">
+
+    <h1 style="margin-left:50px;">{{ tool.name }}</h1>
+
+
+    <form id="form" class="form" action="{% url 'app:homepage' %}" method="post">
+
+      <div class="row border-top border-bottom border-gray pt-2 mb-2">
+        <p>
+          BRD Buddy takes in a Surveygizmo response ID and automatically loads configuration settings into CSR.</a></h>
+        </p>  
+      </div>
+
+      <a href="brd_buddy/loads">Manage Load Attempts</a><br />
+      <a href="brd_buddy/mappings">Manage BRD to CSR Mappings</a><br />
+    </div>
+{% endblock content %}

@@ -1,6 +1,12 @@
 from django import forms
+from django.db import models
+from django import forms
+from django.forms import ModelForm
+from .models import BRDQuestions, Answers, CSRMappings, BRDLoadAttempts, BRDLoadInfo
+from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout, Field, Fieldset,Div, HTML, ButtonHolder
+from .custom_layout_object import *
 
 class VftForm(forms.Form):
     csr_vft_id = forms.CharField(label='CSR ID', max_length=10)
@@ -38,7 +44,6 @@ class GMCForm(forms.Form):
             'id': 'ffd_id'
         })
         '''
-
 
 class PrePostForm(forms.Form):
 
@@ -120,3 +125,65 @@ class PrePostForm(forms.Form):
         self.fields['spreadsheet_url'].widget.attrs.update({
             'placeholder': 'if this is left blank, a new google spreadsheet will be generated',
         })
+
+class LoadForm(forms.ModelForm):
+    
+    class Meta:
+        model = BRDLoadAttempts
+        exclude = ['status']
+
+    def __init__(self, *args, **kwargs):
+        super(LoadForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-3 create-label'
+        self.helper.field_class = 'col-md-9'
+        self.helper.layout = Layout(
+            Div(
+                Field('response_id'),
+                Field('customer_id'),
+                HTML("<br>"),
+                ButtonHolder(Submit('submit', 'save')),
+                )
+            )
+
+class QuestionForm(forms.ModelForm):
+
+    class Meta:
+        model = BRDQuestions
+        exclude = ()
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-3 create-label'
+        self.helper.field_class = 'col-md-9'
+        self.helper.layout = Layout(
+            Div(
+                Field('surveygizmo_id'),
+                Field('question'),
+                Fieldset('Add answers', Formset('answers')),
+                Fieldset('Add mappings', Formset('mappings')),
+                HTML("<br>"),
+                ButtonHolder(Submit('submit', 'save')),
+                )
+            )
+
+class MappingForm(forms.ModelForm):
+
+    class Meta:
+        model = CSRMappings
+        exclude = ()
+
+MappingFormSet = inlineformset_factory(BRDQuestions, CSRMappings, form=MappingForm, fields=['csr_tab', 'csr_setting', 'table_ref', 'col_name'], extra=1, can_delete=True)
+
+class AnswersForm(forms.ModelForm):
+
+    class Meta:
+        model = Answers
+        exclude = ()
+
+AnswersFormSet = inlineformset_factory(BRDQuestions, Answers, form=AnswersForm, fields=['brd_answer', 'csr_value'], extra=1, can_delete=True)

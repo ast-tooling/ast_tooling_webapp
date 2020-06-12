@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block content %}
+<h1>Answers for SurveyGizmo Response {{ id }} </h1>
+
+<body>
+    {% for key, value in d.items %}
+    <li>{{key}} {{value}}</li>
+    {% endfor %}
+</body> 
+{% endblock content %}

@@ -1,0 +1,40 @@
+{% extends "test.html" %}
+{% block content %}
+<div class="card">
+        <div class="card-header">
+            <h1><b> Load Attempt {{ object.pk }}</b></h1>
+        </div>
+        <div class="card-body">
+        <table class="table">
+        <!--for inline added titles-->
+        {% if object.response_id %}
+    	<tr>
+            <td>Response ID</td>
+            <td>{{ object.response_id }}</td>
+        </tr>
+        {% endif %}      
+    	{% if object.customer_id %}
+    	<tr>
+            <td>Customer ID</td>
+            <td>{{ object.customer_id }}</td>
+        </tr>
+        {% endif %}  
+
+        {% if object.has_attempts %}
+        {% for attempt in object.has_attempts.all %}
+        <tr>
+            <td>Surveygizmo ID: {{attempt.surveygizmo_id}}</td>
+            <td>Survey Answer: {{attempt.survey_id}}</td>
+            <td>CSR Setting: {{attempt.csr_setting}}</td>
+            <td>CSR Value: {{attempt.csr_value}}</td>
+            <td>Mapped: {{attempt.mapped}}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}        
+        <!--end-->
+        </table>
+        <a class="btn btn-outline-info" href="{% url 'app:load_answers' resp_id=object.response_id %}">Survey Answers</a>
+        <!-- pk=object.response_id  -->
+        </div>
+</div>
+{% endblock content %}

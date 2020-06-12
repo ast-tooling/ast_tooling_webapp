@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block content %}
+    <div class="card">
+      <div class="card-header">
+      <a class="btn btn-outline-primary" href="{% url 'app:load_create' %}" role="button">Load a New Survey</a>
+      <h1>List of Loads</h1>
+<table border="1" width="600">
+<tr>
+<td> ID </td>
+<td>Response ID</td>
+<td>Customer ID</td>
+</tr>
+
+{% for load in allloads %}
+<tr>
+<td><a href="{% url 'app:load_detail' pk=load.pk %}">{{ load.pk }} {{ loads }}</a></td>
+<td>{{ load.response_id }}</td>
+<td>{{ load.customer_id }}</td>
+</tr>
+{% endfor %}
+</table>
+    </div>
+{% endblock content %}
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" integrity="sha384-7aThvCh9TypR7fIc2HV4O/nFMVCBwyIUKL8XCtKE+8xgCgl/PQGuFsvShjr74PBp" crossorigin="anonymous"></script>
+  </body>
+</html>

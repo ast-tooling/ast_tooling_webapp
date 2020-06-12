@@ -1,0 +1,46 @@
+{% extends "test.html" %}
+{% block content %}
+<div class="card">
+        <div class="card-header">
+            <h1><b>Survey Question {{ object.pk }}</b></h1>
+        </div>
+        <div class="card-body">
+        <table class="table">
+        <!--for inline added titles-->
+        {% if object.surveygizmo_id %}
+    	<tr>
+            <td>Surveygizmo ID</td>
+            <td>{{ object.surveygizmo_id }}</td>
+        </tr>
+        {% endif %}      
+    	{% if object.question %}
+    	<tr>
+            <td>Question</td>
+            <td>{{ object.question }}</td>
+        </tr>
+        {% endif %}     
+        {% if object.has_answers %}
+        {% for answer in object.has_answers.all %}
+        <tr>
+            <td>BRD Answer: {{answer.brd_answer}}</td>
+            <td>CSR Value: {{answer.csr_value}}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        {% if object.has_mappings %}
+        {% for mapping in object.has_mappings.all %}
+        <tr>
+            <td>CSR Tab: {{mapping.csr_tab}}</td>
+            <td>CSR Setting: {{mapping.csr_setting}}</td>
+            <td>Table Reference: {{mapping.table_ref}}</td>
+            <td>Column Name: {{mapping.col_name}}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        <!--end-->
+        </table>
+        <a class="btn btn-outline-info" href="{% url 'app:collection_update' pk=object.id %}">Update</a>
+        <a class="btn btn-outline-danger" href="{% url 'app:collection_delete' pk=object.id %}">Delete</a>
+        </div>
+</div>
+{% endblock content %}

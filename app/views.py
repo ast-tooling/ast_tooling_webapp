@@ -1,15 +1,20 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect, render_to_response
 from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.db import transaction
+from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from celery import task
 import json
+import surveygizmo as sg
 
-from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate
-from .forms import VftForm,PrePostForm,GMCForm
+from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts
+from .forms import VftForm, PrePostForm, GMCForm, QuestionForm, AnswersForm, AnswersFormSet, MappingForm, MappingFormSet, LoadForm
 from .prepost import compare
 from .prepost import sheet_requests
-
+from .brdbuddy import brdbuddy
 
 import os
 
@@ -104,6 +109,9 @@ def thanks(request):
 def no_bueno(request):
     return HttpResponse('this here is the no bueno page, boo')
 
+def confirm(request):
+    return HttpResponse('got the new mapping!')
+
 def gmc_index(request):
     tool = Tool.objects.filter(name='GMC Transparency 3000').values()[0]
     if request.method == 'POST':
@@ -158,3 +166,152 @@ def pull_current_uses_gmc(request):
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+
+class HomepageView(TemplateView):
+    template_name = "test.html"
+
+##########################################################################
+#                           Collection views                             #
+##########################################################################
+
+def mappings(request):
+    allquestions= BRDQuestions.objects.all()
+    context= {'allquestions': allquestions}
+    return render(request,'app/mappings.html',context)
+
+class CollectionDetailView(DetailView):
+    model = BRDQuestions
+    template_name = 'collection_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CollectionDetailView, self).get_context_data(**kwargs)
+        return context
+
+class CollectionCreate(CreateView):
+    model = BRDQuestions
+    template_name = 'collection_create.html'
+    form_class = QuestionForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(CollectionCreate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['answers'] = AnswersFormSet(self.request.POST)
+            data['mappings'] = MappingFormSet(self.request.POST)
+        else:
+            data['answers'] = AnswersFormSet()
+            data['mappings'] = MappingFormSet()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        answers = context['answers']
+        mappings = context['mappings']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+            if answers.is_valid() and mappings.is_valid():
+                answers.instance = self.object
+                mappings.instance = self.object
+                answers.save()
+                mappings.save()
+        return super(CollectionCreate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('app:collection_detail', kwargs={'pk': self.object.pk})
+
+class CollectionUpdate(UpdateView):
+    model = BRDLoadAttempts
+    form_class = LoadForm
+    template_name = 'collection_create.html'
+
+    def get_context_data(self, **kwargs):
+        data = super(CollectionUpdate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['answers'] = AnswersFormSet(self.request.POST, instance=self.object)
+            data['mappings'] = MappingFormSet(self.request.POST, instance=self.object)
+        else:
+            data['answers'] = AnswersFormSet(instance=self.object)
+            data['mappings'] = MappingFormSet(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        answers = context['answers']
+        mappings = context['mappings']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+            if answers.is_valid() and mappings.is_valid():
+                answers.instance = self.object
+                mappings.instance = self.object
+                answers.save()
+                mappings.save()
+        return super(CollectionUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('app:collection_detail', kwargs={'pk': self.object.pk})
+    model = BRDQuestions
+    template_name = 'collection_create.html'
+    form_class = QuestionForm
+    success_url = None
+
+class CollectionDelete(DeleteView):
+    model = BRDQuestions
+    template_name = 'collection_delete.html'
+    success_url = reverse_lazy('app:homepage')
+
+##########################################################################
+#                           Load views                             #
+##########################################################################
+
+def loads(request):
+    allloads= BRDLoadAttempts.objects.all()
+    context= {'allloads': allloads}
+    return render(request,'app/loads.html',context)
+
+class LoadCreate(CreateView):
+    model = BRDLoadAttempts
+    template_name = 'load_create.html'
+    form_class = LoadForm
+    success_url = None
+
+    def get_context_data(self, **kwargs):
+        data = super(LoadCreate, self).get_context_data(**kwargs)
+        if self.request.POST:
+            data['loads'] = LoadForm(self.request.POST)
+        else:
+            data['loads'] = LoadForm()
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        loads = context['loads']
+        with transaction.atomic():
+            form.instance.created_by = self.request.user
+            self.object = form.save()
+            if loads.is_valid():
+                loads.instance = self.object
+                loads.save()
+        return super(LoadCreate, self).form_valid(form)
+        
+    def get_success_url(self):
+        return reverse_lazy('app:load_detail', kwargs={'pk': self.object.pk})
+
+class LoadDetailView(DetailView):
+    model = BRDLoadAttempts
+    template_name = 'load_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(LoadDetailView, self).get_context_data(**kwargs)
+        return context
+
+def showAnswers(request, resp_id):
+    ans_dict = brdbuddy.getSurveyData(resp_id)
+    # add error handling for invalid response IDs
+    # mappings = mappingEngine(ans_dict)
+    # display mappings table on the page with option to download the spreadsheet
+    context = {'id' : resp_id, 'd' : ans_dict}
+    return render(request, 'load_answers.html', context)
+
+

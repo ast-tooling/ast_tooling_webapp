@@ -139,3 +139,35 @@ class GMCTemplate(models.Model):
     wfd_text_qualifier = models.CharField(max_length=2)
     wfd_props = models.TextField()
     gmccustomer = models.ForeignKey('GMCCustomer', on_delete = models.CASCADE)
+
+class BRDLoadAttempts(models.Model):
+    response_id = models.IntegerField()
+    customer_id = models.IntegerField()
+    status = models.CharField(max_length=10)
+
+class BRDLoadInfo(models.Model):
+    load_attempt = models.ForeignKey('BRDLoadAttempts',related_name="has_attempts",on_delete=models.CASCADE)
+    surveygizmo_id = models.IntegerField() # this column is populated by a call to surveygizmo api
+    survey_answer = models.CharField(max_length=100) # this column is populated by a call to surveygizmo api
+    # csr_tab = models.CharField(max_length=20)
+    csr_setting = models.CharField(max_length=100)
+    # table_ref = models.CharField(max_length=100)
+    # col_name = models.CharField(max_length=100)
+    csr_value = models.CharField(max_length=100)
+    mapped = models.BooleanField()
+
+class BRDQuestions(models.Model):
+    surveygizmo_id = models.CharField(max_length=10)
+    question = models.CharField(max_length=300, blank=True)
+
+class CSRMappings(models.Model):
+    map_parents = models.ForeignKey(BRDQuestions,related_name="has_mappings", on_delete=models.CASCADE)
+    csr_tab = models.CharField(max_length=20)
+    csr_setting = models.CharField(max_length=50)
+    table_ref = models.CharField(max_length=100)
+    col_name = models.CharField(max_length=100)
+
+class Answers(models.Model):
+    ans_parent = models.ForeignKey(BRDQuestions,related_name="has_answers",on_delete=models.CASCADE)
+    brd_answer = models.CharField(max_length=100)
+    csr_value = models.CharField(max_length=50)
