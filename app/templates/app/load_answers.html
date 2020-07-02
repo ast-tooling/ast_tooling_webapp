@@ -3,12 +3,22 @@
 {% load crispy_forms_tags %}
 {% crispy form form.helper %}
 
+{% load static %}
 {% block content %}
-<h1>Answers for SurveyGizmo Response {{ id }} </h1>
+<head><link rel="stylesheet" href="{% static 'app/status.css' %}"></head>
+<h1>Queries for SurveyGizmo Response {{ id }}</h1>
 
 <body>
-    {% for key, value in d.items %}
-    <li>{{key}} {{value}}</li>
-    {% endfor %}
+
+    {% if status == "PARTIAL" %}
+    <div class="Partial"> 
+    {% else %} 
+    <div class="Success">
+    {% endif %}
+    <h2>{{ status }}</h2>
+    </div>
+
+    <a target="_blank" download="queries.txt" href="DML Script">DML Script</a>
+
 </body> 
 {% endblock content %}

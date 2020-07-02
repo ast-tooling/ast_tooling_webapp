@@ -3,18 +3,20 @@ from django.http import HttpResponse,Http404,HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.db import transaction
-from django.views.generic import TemplateView
+from django.db.models import Q
+from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from celery import task
 import json
 import surveygizmo as sg
 
-from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts
+from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts, BRDLoadInfo
 from .forms import VftForm, PrePostForm, GMCForm, QuestionForm, AnswersForm, AnswersFormSet, MappingForm, MappingFormSet, LoadForm
 from .prepost import compare
 from .prepost import sheet_requests
-from .brdbuddy import brdbuddy
+
+from app.brdbuddy import mapping, getSurveyData
 
 import os
 
@@ -261,6 +263,16 @@ class CollectionDelete(DeleteView):
     template_name = 'collection_delete.html'
     success_url = reverse_lazy('app:homepage')
 
+class SearchResultsView (ListView):
+    model = BRDQuestions
+    template_name = 'search_results.html'
+
+    def get_queryset(self): # new
+        query = self.request.GET.get('q')
+        object_list = BRDQuestions.objects.filter(
+            Q(question__icontains=query) 
+        )
+        return object_list
 ##########################################################################
 #                           Load views                             #
 ##########################################################################
@@ -306,12 +318,25 @@ class LoadDetailView(DetailView):
         context = super(LoadDetailView, self).get_context_data(**kwargs)
         return context
 
-def showAnswers(request, resp_id):
-    ans_dict = brdbuddy.getSurveyData(resp_id)
+def showAnswers(request, pk):
+    # use the pk to get the load data and save it
+    load_data = BRDLoadAttempts.objects.filter(pk=pk).values()[0]
+    survey_id = load_data['survey_id']
+    resp_id = load_data['response_id']
+
+    # get the answers from sg
+    ans_dict = getSurveyData(survey_id, resp_id)
     # add error handling for invalid response IDs
-    # mappings = mappingEngine(ans_dict)
-    # display mappings table on the page with option to download the spreadsheet
-    context = {'id' : resp_id, 'd' : ans_dict}
-    return render(request, 'load_answers.html', context)
+    if ans_dict == {}:
+        return render(request, 'error_page.html')
+    else:
+        # do the mappings
+        load_info = mapping(ans_dict, resp_id)
+
+        # display mappings table on the page with option to download the spreadsheet
+        context = {'id' : resp_id, 'status' : load_info}
+        return render(request, 'load_answers.html', context)
+
+
 
 

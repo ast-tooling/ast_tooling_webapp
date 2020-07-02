@@ -28,7 +28,8 @@ urlpatterns = [
     path('collection/update/<int:pk>/', views.CollectionUpdate.as_view(), name='collection_update'),
 # Delete an existing mapping
     path('collection/delete/<int:pk>/', views.CollectionDelete.as_view(), name='collection_delete'),
-
+# Search for a mapping
+    path('collection/search/', views.SearchResultsView.as_view(), name='search_results'),
 # BRD Buddy - Manage the Survey Loads
     path('brd_buddy/loads', views.loads,name='loads'),
 # Load a survey
@@ -36,5 +37,5 @@ urlpatterns = [
 # View details about a load
 	path('load/<int:pk>/', views.LoadDetailView.as_view(), name='load_detail'),
 # View answers that will be mapped
-	path('answers/<int:resp_id>/',views.showAnswers, name='load_answers'),
+	path('answers/<int:pk>/',views.showAnswers, name='load_answers'),
 ]

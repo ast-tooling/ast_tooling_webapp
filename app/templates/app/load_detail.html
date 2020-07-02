@@ -6,7 +6,14 @@
         </div>
         <div class="card-body">
         <table class="table">
-        <!--for inline added titles-->
+
+        {% if object.survey_id %}
+        <tr>
+            <td>Survey ID</td>
+            <td>{{ object.survey_id }}</td>
+        </tr>
+        {% endif %} 
+
         {% if object.response_id %}
     	<tr>
             <td>Response ID</td>
@@ -20,21 +27,9 @@
         </tr>
         {% endif %}  
 
-        {% if object.has_attempts %}
-        {% for attempt in object.has_attempts.all %}
-        <tr>
-            <td>Surveygizmo ID: {{attempt.surveygizmo_id}}</td>
-            <td>Survey Answer: {{attempt.survey_id}}</td>
-            <td>CSR Setting: {{attempt.csr_setting}}</td>
-            <td>CSR Value: {{attempt.csr_value}}</td>
-            <td>Mapped: {{attempt.mapped}}</td>
-        </tr>
-        {% endfor %}
-        {% endif %}        
-        <!--end-->
         </table>
-        <a class="btn btn-outline-info" href="{% url 'app:load_answers' resp_id=object.response_id %}">Survey Answers</a>
-        <!-- pk=object.response_id  -->
+        <a class="btn btn-outline-info" href="{% url 'app:load_answers' pk=object.pk %}">Generate Queries</a>
+
         </div>
 </div>
 {% endblock content %}

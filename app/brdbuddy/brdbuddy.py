@@ -1,6 +1,7 @@
 import surveygizmo as sg
 import json
 
+
 def getSurveyData(responseID):
     # Connect to Surveygizmo
     client = sg.SurveyGizmo(
@@ -34,14 +35,4 @@ def getSurveyData(responseID):
     answers_to_map.pop(279)
 
     return answers_to_map
-
-# def mappingEngine(ans_dict):
-    # for sg_id, answer in ans_dict.items():
-    #     if the key exists in BRDQuestions
-    #         insert into BRDLoadInfo
-    #         find the csr tab/setting/val as well as the table and col 
-    #         insert these
-    #         mapping status set to TRUE
-    #     else
-    #         insert into BRDLoadInfo
-    #         mapping status set to FALSE
+    

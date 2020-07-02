@@ -1,6 +1,11 @@
 from django.db import models
 from .prepost import compare
 
+SURVEY_CHOICES = (
+    ('4623162', 'BRD'),
+    ('5671111', 'New BRD'),
+)
+
 # Create your models here.
 class Tool(models.Model):
     name = models.CharField(max_length=255)
@@ -141,31 +146,35 @@ class GMCTemplate(models.Model):
     gmccustomer = models.ForeignKey('GMCCustomer', on_delete = models.CASCADE)
 
 class BRDLoadAttempts(models.Model):
-    response_id = models.IntegerField()
-    customer_id = models.IntegerField()
-    status = models.CharField(max_length=10)
+    survey_id = models.CharField(max_length=10, choices=SURVEY_CHOICES, default='BRD')
+    response_id = models.IntegerField(default=12345 ,blank=True)
+    customer_id = models.IntegerField(default=12345,blank=True)
+    pcase_num = models.IntegerField(default=12345,blank=True)
+    username = models.CharField(max_length=20,blank=True)
+    status = models.CharField(max_length=10,default='partial')
 
 class BRDLoadInfo(models.Model):
     load_attempt = models.ForeignKey('BRDLoadAttempts',related_name="has_attempts",on_delete=models.CASCADE)
-    surveygizmo_id = models.IntegerField() # this column is populated by a call to surveygizmo api
-    survey_answer = models.CharField(max_length=100) # this column is populated by a call to surveygizmo api
-    # csr_tab = models.CharField(max_length=20)
-    csr_setting = models.CharField(max_length=100)
-    # table_ref = models.CharField(max_length=100)
-    # col_name = models.CharField(max_length=100)
-    csr_value = models.CharField(max_length=100)
+    # surveygizmo_id = models.IntegerField() # this column is populated by a call to surveygizmo api
+    # survey_answer = models.CharField(max_length=100) # this column is populated by a call to surveygizmo api
+    csr_tab = models.CharField(max_length=20,default=' ',blank=True)
+    csr_setting = models.CharField(max_length=100,default=' ',blank=True)
+    table_ref = models.CharField(max_length=100,default=' ',blank=True)
+    col_name = models.CharField(max_length=100,default=' ',blank=True)
+    csr_value = models.CharField(max_length=100,default=' ',blank=True)
     mapped = models.BooleanField()
 
 class BRDQuestions(models.Model):
     surveygizmo_id = models.CharField(max_length=10)
+    survey_id = models.CharField(max_length=10, default='4623162')
     question = models.CharField(max_length=300, blank=True)
 
 class CSRMappings(models.Model):
     map_parents = models.ForeignKey(BRDQuestions,related_name="has_mappings", on_delete=models.CASCADE)
-    csr_tab = models.CharField(max_length=20)
-    csr_setting = models.CharField(max_length=50)
-    table_ref = models.CharField(max_length=100)
-    col_name = models.CharField(max_length=100)
+    csr_tab = models.CharField(max_length=20,blank=True)
+    csr_setting = models.CharField(max_length=50,blank=True)
+    table_ref = models.CharField(max_length=100,blank=True)
+    col_name = models.CharField(max_length=100,blank=True)
 
 class Answers(models.Model):
     ans_parent = models.ForeignKey(BRDQuestions,related_name="has_answers",on_delete=models.CASCADE)

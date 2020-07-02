@@ -1,0 +1,16 @@
+{% extends "test.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h1>Uh-oh... Something went wrong!</h1>
+<h2>Please make sure the following are valid: </h2>
+
+<ul>
+    <li>Response ID</li>
+    <li>Customer ID</li>
+    <li>P-case Number</li>
+    <li>Username</li>
+  </ul>
+
+<br><a class="btn btn-outline-primary" href="{% url 'app:homepage' %}" role="button">Back</a>
+{% endblock content %}

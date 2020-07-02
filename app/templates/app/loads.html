@@ -4,11 +4,14 @@
 {% crispy form form.helper %}
 
 {% block content %}
-    <div class="card">
-      <div class="card-header">
-      <a class="btn btn-outline-primary" href="{% url 'app:load_create' %}" role="button">Load a New Survey</a>
-      <h1>List of Loads</h1>
-<table border="1" width="600">
+
+<br><div id="topcorner"><a class="btn btn-outline-primary" href="{% url 'app:homepage' %}" role="button">Back</a></div>
+
+<br><h1>List of Loads</h1>
+
+<br><div id="left-bar"><a class="btn btn-outline-primary" href="{% url 'app:load_create' %}" role="button">Load a New Survey</a></div>
+
+<br><table border="1" width="600">
 <tr>
 <td> ID </td>
 <td>Response ID</td>
@@ -23,7 +26,7 @@
 </tr>
 {% endfor %}
 </table>
-    </div>
+
 {% endblock content %}
 
 <!-- Optional JavaScript -->

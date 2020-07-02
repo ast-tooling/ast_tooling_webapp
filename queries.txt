@@ -1,0 +1,53 @@
+pcase_num: 12345
+username: 
+UPDATE fsiCustomer SET EmailBatchingRule = 'A' WHERE customerID = 1234;
+UPDATE fsiCustomer SET FaxRejectEmail = 'BilltrustError@unitedlegwear.com' WHERE customerID = 1234;
+UPDATE fsiCustomer SET FaxCoverPageDefault = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET FaxDefaultTime = 'Default - Upon receipt & processing of billing file' WHERE customerID = 1234;
+UPDATE fsiCustomer SET ResendFailFaxes = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BranchReporting = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET RoutingMethod = 'R' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenVersion = '3' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenThreshold = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenMaxDays = '1' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseOnPageCount = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseCreditMemos = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenStmtDates = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseDay = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseOnSpecificDates = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseOnSpecificDates = 'No' WHERE customerID = 1234;
+UPDATE fsitranslationmap SET OnlineBillingNameHTML = 'eInvoice Connect' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET SendPaperBillDefault = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET OptionalPaper = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET SendPaperBillDefault = 'Y' WHERE customerID = 1234;
+UPDATE fsitranslationmap SET AccountNumber = 'Account Number' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET BillName = 'Bill' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET AllowMultipleLoginsPerAccount = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET IGCurrentBalanceDisplay = 'Y' WHERE customerID = 1234;
+UPDATE fsicustomersettings
+fsiatom SET ZeroDollarPayments = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET IGAutoPayments = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET AutoPayDays = '-31' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET AllowIGCCDiscounts = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET LimitIGCC = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET AllowStatementPayments = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET IncludeOverUnder = 'Y' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET ShortPayReasonCodeFormat = 'FreeForm' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET IGFilterDuplicateInvoices = 'Y' WHERE customerID = 1234;
+UPDATE fsiatom
+fsicustomersettings SET ShowMostRecentBill = 'N' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET IGDateFilters = '7 , 30, 90' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET UsePaymentNote = '1' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET PaymentNoteLabel = 'Yes' WHERE customerID = 1234;
+UPDATE fsiCustomer SET OpenBalReportEmail = 'billtrust@unitedlegwear.com' WHERE customerID = 1234;
+UPDATE fsiOnlineBillingParms SET UsesOpenBalance = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET RoutingMethod = 'R' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenThreshold = 'Yes, please list amount:' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenMaxDays = 'Yes, please list here:' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseOnPageCount = 'Yes, please list page count here:' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseCreditMemos = 'Y' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenStmtDates = 'Yes, please provide month end date: (e.g. 25th, EOM)' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseOnSpecificDates = 'No' WHERE customerID = 1234;
+UPDATE fsiCustomer SET BullpenReleaseFileName = 'No' WHERE customerID = 1234;
+UPDATE fsiatom
+fsicustomersettings SET ShowMostRecentBill = 'N' WHERE customerID = 1234;

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load crispy_forms_tags %}
+{% crispy form form.helper %}
+
+{% block content %}
+<h1>Search Results</h1>
+
+<table border="1" width="600">
+    <tr>
+    <td> ID </td>
+    <td>Surveygizmo ID</td>
+    <td>Question</td>
+    </tr>
+
+    {% for question in object_list %}
+    <tr>
+    <td><a href="{% url 'app:collection_detail' pk=question.pk %}">{{ question.pk }} {{ questions }}</a></td>
+    <td>{{ question.surveygizmo_id }}</td>
+    <td>{{ question.question }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+        </div>
+    {% endblock content %}

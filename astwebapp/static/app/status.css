@@ -1,0 +1,12 @@
+.Fail {
+    color: #FF0000;
+  }
+  
+.Success {
+    color: #006400;
+  }
+    
+.Partial {
+    color: #DAA520;
+  }
+

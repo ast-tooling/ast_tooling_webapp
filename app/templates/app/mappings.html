@@ -4,10 +4,15 @@
 {% crispy form form.helper %}
 
 {% block content %}
-    <div class="card">
-      <div class="card-header">
-      <a class="btn btn-outline-primary" href="{% url 'app:collection_create' %}" role="button">Create new mapping</a>
-      <h1>List of Mappings</h1>
+
+<br><a class="btn btn-outline-primary" href="{% url 'app:homepage' %}" role="button">Back</a>
+
+<br><a class="btn btn-outline-primary" href="{% url 'app:collection_create' %}" role="button">Create new mapping</a>
+
+<a class="btn btn-outline-primary"><form action="{% url 'app:search_results' %}" method="get"> <input name="q" type="text" placeholder="Search..."> </form></a>
+
+<h1>List of Mappings</h1>
+
 <table border="1" width="600">
 <tr>
 <td> ID </td>
@@ -23,7 +28,7 @@
 </tr>
 {% endfor %}
 </table>
-    </div>
+
 {% endblock content %}
 
 <!-- Optional JavaScript -->

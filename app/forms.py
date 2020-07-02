@@ -141,8 +141,11 @@ class LoadForm(forms.ModelForm):
         self.helper.field_class = 'col-md-9'
         self.helper.layout = Layout(
             Div(
+                Field('survey_id'),
                 Field('response_id'),
                 Field('customer_id'),
+                Field('pcase_num'),
+                Field('username'),
                 HTML("<br>"),
                 ButtonHolder(Submit('submit', 'save')),
                 )
@@ -163,6 +166,7 @@ class QuestionForm(forms.ModelForm):
         self.helper.field_class = 'col-md-9'
         self.helper.layout = Layout(
             Div(
+                Field('survey_id'),
                 Field('surveygizmo_id'),
                 Field('question'),
                 Fieldset('Add answers', Formset('answers')),
