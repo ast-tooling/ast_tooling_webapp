@@ -2,7 +2,7 @@ from django import forms
 from django.db import models
 from django import forms
 from django.forms import ModelForm
-from .models import BRDQuestions, Answers, CSRMappings, BRDLoadAttempts, BRDLoadInfo
+from .models import BRDQuestions, Answers, CSRMappings, BRDLoadAttempts
 from django.forms.models import inlineformset_factory
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Field, Fieldset,Div, HTML, ButtonHolder

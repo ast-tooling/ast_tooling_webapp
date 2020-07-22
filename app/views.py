@@ -11,7 +11,7 @@ from celery import task
 import json
 import surveygizmo as sg
 
-from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts, BRDLoadInfo
+from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts
 from .forms import VftForm, PrePostForm, GMCForm, QuestionForm, AnswersForm, AnswersFormSet, MappingForm, MappingFormSet, LoadForm
 from .prepost import compare
 from .prepost import sheet_requests
@@ -326,12 +326,16 @@ def showAnswers(request, pk):
 
     # get the answers from sg
     ans_dict = getSurveyData(survey_id, resp_id)
+
+    # get pcase number to create link to z drive
+    # pcase_num = BRDLoadAttempts.objects.filter(response_id=resp_id).values('pcase_num')[0]['pcase_num']
+
     # add error handling for invalid response IDs
     if ans_dict == {}:
         return render(request, 'error_page.html')
     else:
         # do the mappings
-        load_info = mapping(ans_dict, resp_id)
+        load_info = mapping(ans_dict, resp_id, survey_id)
 
         # display mappings table on the page with option to download the spreadsheet
         context = {'id' : resp_id, 'status' : load_info}

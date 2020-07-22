@@ -13,12 +13,12 @@
     {% if status == "PARTIAL" %}
     <div class="Partial"> 
     {% else %} 
-    <div class="Success">
+    <div class="Fail">
     {% endif %}
     <h2>{{ status }}</h2>
     </div>
 
-    <a target="_blank" download="queries.txt" href="DML Script">DML Script</a>
+    <!-- <a target="_blank" download="queries.txt" href="DML Script">DML Script</a> -->
 
 </body> 
 {% endblock content %}

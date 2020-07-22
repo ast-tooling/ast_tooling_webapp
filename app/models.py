@@ -153,17 +153,6 @@ class BRDLoadAttempts(models.Model):
     username = models.CharField(max_length=20,blank=True)
     status = models.CharField(max_length=10,default='partial')
 
-class BRDLoadInfo(models.Model):
-    load_attempt = models.ForeignKey('BRDLoadAttempts',related_name="has_attempts",on_delete=models.CASCADE)
-    # surveygizmo_id = models.IntegerField() # this column is populated by a call to surveygizmo api
-    # survey_answer = models.CharField(max_length=100) # this column is populated by a call to surveygizmo api
-    csr_tab = models.CharField(max_length=20,default=' ',blank=True)
-    csr_setting = models.CharField(max_length=100,default=' ',blank=True)
-    table_ref = models.CharField(max_length=100,default=' ',blank=True)
-    col_name = models.CharField(max_length=100,default=' ',blank=True)
-    csr_value = models.CharField(max_length=100,default=' ',blank=True)
-    mapped = models.BooleanField()
-
 class BRDQuestions(models.Model):
     surveygizmo_id = models.CharField(max_length=10)
     survey_id = models.CharField(max_length=10, default='4623162')
@@ -175,6 +164,10 @@ class CSRMappings(models.Model):
     csr_setting = models.CharField(max_length=50,blank=True)
     table_ref = models.CharField(max_length=100,blank=True)
     col_name = models.CharField(max_length=100,blank=True)
+
+class TableCustomerId(models.Model):
+   table_ref = models.CharField(max_length=100,blank=True)
+   cust_id_name = models.CharField(max_length=100,blank=True)
 
 class Answers(models.Model):
     ans_parent = models.ForeignKey(BRDQuestions,related_name="has_answers",on_delete=models.CASCADE)
