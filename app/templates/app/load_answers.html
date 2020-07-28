@@ -9,7 +9,7 @@
 <h1>Queries for SurveyGizmo Response {{ id }}</h1>
 
 <body>
-
+    <h2>This mapping attempt was: </h2>
     {% if status == "PARTIAL" %}
     <div class="Partial"> 
     {% else %} 
@@ -18,7 +18,21 @@
     <h2>{{ status }}</h2>
     </div>
 
-    <!-- <a target="_blank" download="queries.txt" href="DML Script">DML Script</a> -->
+    <h2>Go to Z:\IT Documents\QA\{{ pcase }} for the: </h2>
+    <ul>
+        <li>Audit Log</li>
+        <li>DML Script</li>
+        <li>Questions that could not be mapped</li>
+    </ul>
+
+    <br>
+
+    <h2><b> Next Steps...</b></h2>
+    <ul>
+        <li>Head to the P-case Folder</li>
+        <li>Download your files</li>
+        <li>Submit them for code review!</li>
+    </ul>
 
 </body> 
 {% endblock content %}

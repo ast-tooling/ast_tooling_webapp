@@ -10,23 +10,28 @@
         {% if object.survey_id %}
         <tr>
             <td>Survey ID</td>
-            <td>{{ object.survey_id }}</td>
+            <td><b>{{ object.survey_id }}</b></td>
         </tr>
         {% endif %} 
 
         {% if object.response_id %}
     	<tr>
             <td>Response ID</td>
-            <td>{{ object.response_id }}</td>
+            <td><b>{{ object.response_id }}</b></td>
         </tr>
         {% endif %}      
     	{% if object.customer_id %}
     	<tr>
             <td>Customer ID</td>
-            <td>{{ object.customer_id }}</td>
+            <td><b>{{ object.customer_id }}</b></td>
         </tr>
         {% endif %}  
-
+        {% if object.pcase_num %}
+    	<tr>
+            <td>P-Case Number</td>
+            <td><b>{{ object.pcase_num }}</b></td>
+        </tr>
+        {% endif %}  
         </table>
         <a class="btn btn-outline-info" href="{% url 'app:load_answers' pk=object.pk %}">Generate Queries</a>
 

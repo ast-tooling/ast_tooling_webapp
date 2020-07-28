@@ -327,18 +327,15 @@ def showAnswers(request, pk):
     # get the answers from sg
     ans_dict = getSurveyData(survey_id, resp_id)
 
-    # get pcase number to create link to z drive
-    # pcase_num = BRDLoadAttempts.objects.filter(response_id=resp_id).values('pcase_num')[0]['pcase_num']
-
     # add error handling for invalid response IDs
     if ans_dict == {}:
         return render(request, 'error_page.html')
     else:
         # do the mappings
-        load_info = mapping(ans_dict, resp_id, survey_id)
+        load_info, pcase_num = mapping(ans_dict, resp_id)
 
         # display mappings table on the page with option to download the spreadsheet
-        context = {'id' : resp_id, 'status' : load_info}
+        context = {'id' : resp_id, 'status' : load_info, 'pcase' : pcase_num}
         return render(request, 'load_answers.html', context)
 
 

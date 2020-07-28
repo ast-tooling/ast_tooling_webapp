@@ -149,7 +149,7 @@ class BRDLoadAttempts(models.Model):
     survey_id = models.CharField(max_length=10, choices=SURVEY_CHOICES, default='BRD')
     response_id = models.IntegerField(default=12345 ,blank=True)
     customer_id = models.IntegerField(default=12345,blank=True)
-    pcase_num = models.IntegerField(default=12345,blank=True)
+    pcase_num = models.CharField(max_length=20,default='PLEASE FILL IN')
     username = models.CharField(max_length=20,blank=True)
     status = models.CharField(max_length=10,default='partial')
 
