@@ -100,6 +100,7 @@ def mapping(ans_dict, resp_id):
                 csr_setting = mapping['csr_setting']
                 new_value = answer['csr_value']
 
+                # set of logic that will be used if fsicustomersettings does not need to be updated
                 if 'fsiatom' not in table:
                     cust_id_query = TableCustomerId.objects.filter(table_ref=table).values()[0]
                     cust_identifier = cust_id_query['cust_id_name']
@@ -111,12 +112,14 @@ def mapping(ans_dict, resp_id):
                     if 'list' in new_value or 'provide' in new_value:
                         new_value = 'Y'
                     
+                    # fetching the old value
                     query =f'SELECT {col} FROM {table} WHERE {cust_identifier} = {cust_id}' 
                 
                     cursor = mydb.cursor()
                     cursor.execute(query)
                     records = cursor.fetchall()
 
+                    # if the old and new value are different then generate the UDPATE and audit statement
                     for row in records:
                         old_val = row[0]
                         if not isinstance(old_val, str):
@@ -128,6 +131,7 @@ def mapping(ans_dict, resp_id):
                             audit_update = f"INSERT INTO fsicsraudits (EventDate, EventUser, IPAddress, CustomerId, Description) VALUE({datetime.datetime.now()}, brdbuddy, http://ssnj-devast01/, {cust_id}, {audit_statement})"
                             audit_file.write(audit_update + '\n')
                                 
+                # if fsiatom is referenced in the column there is some extra logic that needs to be used to generate the UPDATE statement
                 else:
                     update_query, old_valueAtom, new_valueAtom = fsiatom(table, col, csr_setting, new_value, cust_id)
                     audit_statement = f"\"{username} changed {csr_setting} from \'{old_valueAtom}\' to \'{new_valueAtom}\'\" "
@@ -135,6 +139,7 @@ def mapping(ans_dict, resp_id):
                     dml_file.write(update_query + '\n')
                     audit_file.write(audit_update + '\n')
 
+            # if the mapping for the question does not exist, the Surveygizmo question id will be written the to manual entry file
             else:
                 manual_file.write("Survey Question " + str(sg_id) + " is missing a mapping!" + '\n')
 
@@ -150,7 +155,9 @@ def mapping(ans_dict, resp_id):
         status = 'PARTIAL'
     return status, pcase_num
 
+# separate logic for mappings that use fsiatom
 def fsiatom (table, col, setting, val, cust_id):
+    # the column and value will have an ID called the AtomId
     setting_query = f'(SELECT AtomId FROM fsiatom WHERE AtomValue = \'{col}\')'
     value_query = f'(SELECT AtomId FROM fsiatom WHERE AtomValue = \'{val}\' LIMIT 1)'
     settingAtom = 0
@@ -158,22 +165,26 @@ def fsiatom (table, col, setting, val, cust_id):
     
     cursor = mydb.cursor()
 
+    # get the setting AtomId
     cursor.execute(setting_query)
     settings_records = cursor.fetchall()
     for row in settings_records:
         settingAtom = row[0]
     
+    # get the setting AtomId
     cursor.execute(value_query)
     values_records = cursor.fetchall()
     for row in values_records:
         valueAtom = row[0]
 
+    # query to get the old ValueAtom
     audit_query = f'SELECT ValueAtom FROM fsicustomersettings WHERE SettingsAtom = {settingAtom} AND CustomerId = {cust_id}' 
     old_valueAtom = 0
 
     cursor.execute(audit_query)
     old_values_records = cursor.fetchall()
 
+    # if the ValueAtom does not exist the row in fsicustomersettings does not exist either so we need to insert that!
     if not old_values_records:
         pathAtom_query = f'SELECT DISTINCT PathAtom FROM fsicustomersettings WHERE SettingsAtom = {settingAtom};'
 
@@ -182,6 +193,7 @@ def fsiatom (table, col, setting, val, cust_id):
 
         return f'INSERT INTO fsicustomersettings (SettingsStatus, CustomerId, SettingsAtom, ValueAtom, PathAtom) VALUES (5, {cust_id}, {settingAtom}, {valueAtom}, {pathAtom});', '', valueAtom
 
+    # if the ValueAtom does exist, we can go ahead and generate the UPDATE statment
     else:
         for row in values_records:
             old_valueAtom = row[0]

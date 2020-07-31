@@ -155,7 +155,7 @@ class BRDLoadAttempts(models.Model):
 
 class BRDQuestions(models.Model):
     surveygizmo_id = models.CharField(max_length=10)
-    survey_id = models.CharField(max_length=10, default='4623162')
+    survey_id = models.CharField(max_length=10, choices=SURVEY_CHOICES, default='BRD')
     question = models.CharField(max_length=300, blank=True)
 
 class CSRMappings(models.Model):
