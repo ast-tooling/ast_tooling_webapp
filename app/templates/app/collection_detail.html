@@ -1,5 +1,7 @@
 {% extends "test.html" %}
 {% block content %}
+<br><div id="topcorner"><a class="btn btn-outline-primary" href="{% url 'app:mappings' %}" role="button">Back</a></div>
+<br>
 <div class="card">
         <div class="card-header">
             <h1><b>Survey Question {{ object.pk }}</b></h1>
@@ -9,31 +11,31 @@
         <!--for inline added titles-->
         {% if object.surveygizmo_id %}
     	<tr>
-            <td>Surveygizmo ID</td>
+            <td><b>Surveygizmo ID</b></td>
             <td>{{ object.surveygizmo_id }}</td>
         </tr>
         {% endif %}      
     	{% if object.question %}
     	<tr>
-            <td>Question</td>
+            <td><b>Question</b></td>
             <td>{{ object.question }}</td>
         </tr>
         {% endif %}     
         {% if object.has_answers %}
         {% for answer in object.has_answers.all %}
         <tr>
-            <td>BRD Answer: {{answer.brd_answer}}</td>
-            <td>CSR Value: {{answer.csr_value}}</td>
+            <td><b>BRD Answer:</b> {{answer.brd_answer}}</td>
+            <td><b>CSR Value: </b>{{answer.csr_value}}</td>
         </tr>
         {% endfor %}
         {% endif %}
         {% if object.has_mappings %}
         {% for mapping in object.has_mappings.all %}
         <tr>
-            <td>CSR Tab: {{mapping.csr_tab}}</td>
-            <td>CSR Setting: {{mapping.csr_setting}}</td>
-            <td>Table Reference: {{mapping.table_ref}}</td>
-            <td>Column Name: {{mapping.col_name}}</td>
+            <td><b>CSR Tab: </b>{{mapping.csr_tab}}</td>
+            <td><b>CSR Setting: </b>{{mapping.csr_setting}}</td>
+            <td><b>Table Reference: </b>{{mapping.table_ref}}</td>
+            <td><b>Column Name: </b>{{mapping.col_name}}</td>
         </tr>
         {% endfor %}
         {% endif %}

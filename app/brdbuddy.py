@@ -4,6 +4,9 @@ import json
 import urllib.request
 import mysql.connector
 import os.path
+import datetime
+
+parent_path = '\\\\ssnj-isilon01\\astweb\\brd_buddy'
 
 v_host = "ssnj-qadb03"
 v_database ="ASTDEVDB_STACK1_01"
@@ -59,10 +62,16 @@ def mapping(ans_dict, resp_id):
     username = BRDLoadAttempts.objects.filter(response_id=resp_id).values('username')[0]['username']
     pcase_num = BRDLoadAttempts.objects.filter(response_id=resp_id).values('pcase_num')[0]['pcase_num']
 
+    # create directory to hold output files
+    path = os.path.join(parent_path, f'{pcase_num}') 
+    if not os.path.isdir(path):
+        os.mkdir(path)
+    
+
     # create files to write DLM, audits and manual entries to
-    dml = os.path.join(f'Z:\IT Documents\QA\{pcase_num}', f"{pcase_num}_dml.txt")
-    audit = os.path.join(f'Z:\IT Documents\QA\{pcase_num}', f"{pcase_num}_audit.txt")
-    manual = os.path.join(f'Z:\IT Documents\QA\{pcase_num}', f"{pcase_num}_manual.txt")
+    dml = os.path.join(path, f"{pcase_num}_dml.txt")
+    audit = os.path.join(path, f"{pcase_num}_audit.txt")
+    manual = os.path.join(path, f"{pcase_num}_manual.txt")
 
     dml_file = open(dml, 'w')
     audit_file = open(audit, 'w')
@@ -70,12 +79,9 @@ def mapping(ans_dict, resp_id):
 
     if mydb.is_connected():
         db_Info = mydb.get_server_info()
-        print("Connected to MySQL Server version ", db_Info)
         cursor = mydb.cursor()
 
-        count = 1
         # loop through sg dict
-    
         for sg_id, answer in ans_dict.items():
 
             # if the sg question exists in the mapping table
@@ -93,10 +99,6 @@ def mapping(ans_dict, resp_id):
                 col = mapping['col_name']
                 csr_setting = mapping['csr_setting']
                 new_value = answer['csr_value']
-
-                # UPDATE THESE TO THE CORRECT VALUES
-                audit_table = 'csr_data'
-                audit_col = 'audit_history'
 
                 if 'fsiatom' not in table:
                     cust_id_query = TableCustomerId.objects.filter(table_ref=table).values()[0]
@@ -123,15 +125,13 @@ def mapping(ans_dict, resp_id):
                             dml_file.write(f'UPDATE {table} SET {col} = \'{new_value}\', UpdateUser = {pcase_num} WHERE {cust_identifier} = {cust_id};' + '\n')
                             query_count = query_count + 1
                             audit_statement = f"\"{username} changed {csr_setting} from \'{old_val}\' to \'{new_value}\'\" "
-                            # COMPLETE AUDIT UPDATE STATEMENT
-                            audit_update = f"INSERT INTO fsicsraudits ({audit_col}) VALUE({audit_statement})"
+                            audit_update = f"INSERT INTO fsicsraudits (EventDate, EventUser, IPAddress, CustomerId, Description) VALUE({datetime.datetime.now()}, brdbuddy, http://ssnj-devast01/, {cust_id}, {audit_statement})"
                             audit_file.write(audit_update + '\n')
                                 
                 else:
                     update_query, old_valueAtom, new_valueAtom = fsiatom(table, col, csr_setting, new_value, cust_id)
                     audit_statement = f"\"{username} changed {csr_setting} from \'{old_valueAtom}\' to \'{new_valueAtom}\'\" "
-                    # COMPLETE AUDIT UPDATE STATEMENT
-                    audit_update = f"INSERT INTO fsicsraudits ({audit_col}) VALUE({audit_statement})"
+                    audit_update = f"INSERT INTO fsicsraudits (EventDate, EventUser, IPAddress, CustomerId, Description) VALUE({datetime.datetime.now()}, brdbuddy, http://ssnj-devast01/, {cust_id}, {audit_statement})"
                     dml_file.write(update_query + '\n')
                     audit_file.write(audit_update + '\n')
 
@@ -180,7 +180,7 @@ def fsiatom (table, col, setting, val, cust_id):
         for row in values_records:
             pathAtom = row[0]
 
-        return f'INSERT INTO fsicustomersettings VALUES 5, {cust_id}, {settingAtom}, {valueAtom}, {pathAtom}', 'NULL', valueAtom
+        return f'INSERT INTO fsicustomersettings (SettingsStatus, CustomerId, SettingsAtom, ValueAtom, PathAtom) VALUES (5, {cust_id}, {settingAtom}, {valueAtom}, {pathAtom});', '', valueAtom
 
     else:
         for row in values_records:

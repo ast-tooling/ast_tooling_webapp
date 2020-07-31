@@ -6,6 +6,9 @@
 {% load static %}
 {% block content %}
 <head><link rel="stylesheet" href="{% static 'app/status.css' %}"></head>
+
+<br><div id="topcorner"><a class="btn btn-outline-primary" href="{% url 'app:loads' %}" role="button">Back</a></div>
+<br>
 <h1>Queries for SurveyGizmo Response {{ id }}</h1>
 
 <body>
@@ -18,7 +21,7 @@
     <h2>{{ status }}</h2>
     </div>
 
-    <h2>Go to Z:\IT Documents\QA\{{ pcase }} for the: </h2>
+    <h2>Go to <b> \\ssnj-isilon01\astweb\brd_buddy\{{ pcase }} </b> for the: </h2>
     <ul>
         <li>Audit Log</li>
         <li>DML Script</li>
@@ -29,7 +32,7 @@
 
     <h2><b> Next Steps...</b></h2>
     <ul>
-        <li>Head to the P-case Folder</li>
+        <li>Head to the P-case Folder (Copy the link above into File Explorer!)</li>
         <li>Download your files</li>
         <li>Submit them for code review!</li>
     </ul>

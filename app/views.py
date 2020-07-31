@@ -9,7 +9,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from celery import task
 import json
-import surveygizmo as sg
 
 from .models import Tool,PrePostComp, GMCCustomer, GMCTemplate, BRDQuestions, Answers, CSRMappings, BRDLoadAttempts
 from .forms import VftForm, PrePostForm, GMCForm, QuestionForm, AnswersForm, AnswersFormSet, MappingForm, MappingFormSet, LoadForm

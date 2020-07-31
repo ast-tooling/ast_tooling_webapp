@@ -1,5 +1,7 @@
 {% extends "test.html" %}
 {% block content %}
+<br><div id="topcorner"><a class="btn btn-outline-primary" href="{% url 'app:loads' %}" role="button">Back</a></div>
+<br>
 <div class="card">
         <div class="card-header">
             <h1><b> Load Attempt {{ object.pk }}</b></h1>
