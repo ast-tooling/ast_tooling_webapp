@@ -187,6 +187,7 @@ def fsiatom (table, col, setting, val, cust_id):
     # if the ValueAtom does not exist the row in fsicustomersettings does not exist either so we need to insert that!
     if not old_values_records:
         pathAtom_query = f'SELECT DISTINCT PathAtom FROM fsicustomersettings WHERE SettingsAtom = {settingAtom};'
+        pathAtom = 0
 
         for row in values_records:
             pathAtom = row[0]
