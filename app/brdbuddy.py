@@ -63,7 +63,7 @@ def mapping(ans_dict, resp_id):
     pcase_num = BRDLoadAttempts.objects.filter(response_id=resp_id).values('pcase_num')[0]['pcase_num']
 
     # create directory to hold output files
-    path = os.path.join(parent_path, f'{pcase_num}') 
+    path = os.path.join(parent_path, f'{pcase_num}').replace("/","\\") 
     if not os.path.isdir(path):
         os.mkdir(path)
     
